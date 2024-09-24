@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,10 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
   TextEditingController doc1 = TextEditingController();
   TextEditingController header = TextEditingController();
   TextEditingController message = TextEditingController();
+
+  var db = FirebaseFirestore.instance;
+
+  late StreamSubscription listener;
 
   @override
   void initState() {
@@ -235,113 +240,80 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                   }
                 },
               ),
-              // ปุ่มรายการพัสดุ
-              SizedBox(
-                width: 200,
-                height: 200,
-                child: FilledButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled:
-                          true, // ให้ modal สามารถขยายได้เต็มหน้าจอ
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(20)),
-                      ),
-                      builder: (context) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal:
-                                  20.0), // ปรับขนาดความกว้างด้วย Padding
-                          child: FractionallySizedBox(
-                            heightFactor: 0.9, // ความสูง modal 90% ของจอ
-                            widthFactor: 10, // ความกว้าง modal 80% ของจอ
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        'รายการงาน',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(height: 20),
-                                      Text('sssssssss'),
-                                      SizedBox(height: 20),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.pop(context); // ปิด modal
-                                        },
-                                        child: Text('ปิด'),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  style: FilledButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
-                    elevation: 15,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0)),
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/images/box.png',
-                            width: 100, height: 100),
-                        Text('รายการงาน', style: TextStyle(fontSize: 16)),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
-              Column(
-                children: [
-                  const Text('Document'),
-                  TextField(
-                    controller: doc1,
-                  ),
-                  const Text('Name'),
-                  TextField(
-                    controller: header,
-                  ),
-                  const Text('Message'),
-                  TextField(
-                    controller: message,
-                  ),
-                  FilledButton(
-                      onPressed: () {
-                        var db = FirebaseFirestore.instance;
-
-                        var data = {
-                          'header': header.text,
-                          'message': message.text,
-                        };
-
-                        db.collection('inbox').doc('Room1234').set(data);
-                      },
-                      child: const Text('Add Data'))
-                ],
-              ),
-
-               FilledButton(
-		onPressed: () {},
-		child: const Text('Start Real-time Get')),
+              // // ปุ่มรายการพัสดุ
+              // SizedBox(
+              //   width: 200,
+              //   height: 200,
+              //   child: FilledButton(
+              //     onPressed: () {
+              //       showModalBottomSheet(
+              //         context: context,
+              //         isScrollControlled:
+              //             true, // ให้ modal สามารถขยายได้เต็มหน้าจอ
+              //         backgroundColor: Colors.white,
+              //         shape: RoundedRectangleBorder(
+              //           borderRadius:
+              //               BorderRadius.vertical(top: Radius.circular(20)),
+              //         ),
+              //         builder: (context) {
+              //           return Padding(
+              //             padding: const EdgeInsets.symmetric(
+              //                 horizontal:
+              //                     20.0), // ปรับขนาดความกว้างด้วย Padding
+              //             child: FractionallySizedBox(
+              //               heightFactor: 0.9, // ความสูง modal 90% ของจอ
+              //               widthFactor: 10, // ความกว้าง modal 80% ของจอ
+              //               child: Column(
+              //                 mainAxisSize: MainAxisSize.min,
+              //                 children: <Widget>[
+              //                   Padding(
+              //                     padding: const EdgeInsets.all(20.0),
+              //                     child: Column(
+              //                       children: [
+              //                         Text(
+              //                           'รายการงาน',
+              //                           style: TextStyle(
+              //                               fontSize: 18,
+              //                               fontWeight: FontWeight.bold),
+              //                         ),
+              //                         SizedBox(height: 20),
+              //                         Text('sssssssss'),
+              //                         SizedBox(height: 20),
+              //                         ElevatedButton(
+              //                           onPressed: () {
+              //                             Navigator.pop(context); // ปิด modal
+              //                           },
+              //                           child: Text('ปิด'),
+              //                         ),
+              //                       ],
+              //                     ),
+              //                   ),
+              //                 ],
+              //               ),
+              //             ),
+              //           );
+              //         },
+              //       );
+              //     },
+              //     style: FilledButton.styleFrom(
+              //       backgroundColor: Colors.white,
+              //       foregroundColor: Colors.black,
+              //       elevation: 15,
+              //       shape: RoundedRectangleBorder(
+              //           borderRadius: BorderRadius.circular(10.0)),
+              //     ),
+              //     child: Center(
+              //       child: Column(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: [
+              //           Image.asset('assets/images/box.png',
+              //               width: 100, height: 100),
+              //           Text('รายการงาน', style: TextStyle(fontSize: 16)),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
