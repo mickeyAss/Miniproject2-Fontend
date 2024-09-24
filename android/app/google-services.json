@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "910504344799",
+    "project_id": "gps-miniproject2",
+    "storage_bucket": "gps-miniproject2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910504344799:android:a5c67870af8d47d5c3bd6a",
+        "android_client_info": {
+          "package_name": "com.example.fontend_miniproject2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4Z2zE276vqY4C2B_1u2RXVFLAdAyZ0bU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
