@@ -2,12 +2,15 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:fontend_miniproject2/config/config.dart';
+import 'package:fontend_miniproject2/pages/send_rider.dart';
 import 'package:fontend_miniproject2/pages/select_login.dart';
 import 'package:fontend_miniproject2/pages/profile_user.dart';
 import 'package:fontend_miniproject2/models/get_data_rider.dart';
+import 'package:fontend_miniproject2/models/get_all_product.dart';
 
 class HomeRiderPage extends StatefulWidget {
   final int rid;
@@ -21,11 +24,14 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
   GetStorage gs = GetStorage();
   late GetDataRider rider;
   late Future<void> loadData_Rider;
+  late Future<void> loadData_product;
+  List<GetAllProduct> data = [];
 
   @override
   void initState() {
     super.initState();
     loadData_Rider = loadDataUser();
+    loadData_product = loadDataProduct();
   }
 
   @override
@@ -178,104 +184,133 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
         color: Color.fromARGB(255, 72, 0, 0),
         width: double.infinity,
         height: double.infinity,
-        child: SingleChildScrollView(
+        child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(height: 5),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: SizedBox(
-                  height: 50,
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'ตรวจสอบสถานะพัสดุ...',
-                      prefixIcon: Icon(Icons.search),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
+              FutureBuilder(
+                future: loadData_product,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('เกิดข้อผิดพลาด'));
+                  } else {
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: data.map<Widget>((e) {
+                          return ExpansionTile(
+                            title: Text(e.proName),
+                            children: <Widget>[
+                              ListTile(
+                                title: Text('รายละเอียดสินค้า'),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(e.proDetail),
+                                    Text('เลขพัสดุ : ${e.trackingNumber}')
+                                  ],
+                                ),
+                              ),
+                              FilledButton(
+                                onPressed: () async {
+                                  var postion = await _determinePosition();
+                                  log('${postion.latitude} ${postion.longitude}');
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SendRederPage(
+                                        latitude: postion.latitude.toString(),
+                                        longitude: postion.longitude.toString(),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: const Text('รับงาน'),
+                              ),
+                            ],
+                          );
+                        }).toList(),
                       ),
+                    );
+                  }
+                },
+              ),
+              // ปุ่มรายการพัสดุ
+              SizedBox(
+                width: 200,
+                height: 200,
+                child: FilledButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled:
+                          true, // ให้ modal สามารถขยายได้เต็มหน้าจอ
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20)),
+                      ),
+                      builder: (context) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal:
+                                  20.0), // ปรับขนาดความกว้างด้วย Padding
+                          child: FractionallySizedBox(
+                            heightFactor: 0.9, // ความสูง modal 90% ของจอ
+                            widthFactor: 10, // ความกว้าง modal 80% ของจอ
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'รายการงาน',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(height: 20),
+                                      Text('sssssssss'),
+                                      SizedBox(height: 20),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context); // ปิด modal
+                                        },
+                                        child: Text('ปิด'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                    elevation: 15,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0)),
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/images/box.png',
+                            width: 100, height: 100),
+                        Text('รายการงาน', style: TextStyle(fontSize: 16)),
+                      ],
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 150),
-
-              // ปุ่มรายการพัสดุ
-              buildActionButton('รายการงาน', 'assets/images/box.png', () {}),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildActionButton(
-      String title, String assetPath, VoidCallback onPressed) {
-    return SizedBox(
-      width: 200,
-      height: 200,
-      child: FilledButton(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true, // ให้ modal สามารถขยายได้เต็มหน้าจอ
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-            ),
-            builder: (context) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0), // ปรับขนาดความกว้างด้วย Padding
-                child: FractionallySizedBox(
-                  heightFactor: 0.9, // ความสูง modal 90% ของจอ
-                  widthFactor: 10, // ความกว้าง modal 80% ของจอ
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              'รายการงาน',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 20),
-                            Text('นี่คือรายละเอียดงานที่คุณเลือก...'),
-                            SizedBox(height: 20),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context); // ปิด modal
-                              },
-                              child: Text('ปิด'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        },
-        style: FilledButton.styleFrom(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          elevation: 15,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(assetPath, width: 100, height: 100),
-              Text(title, style: TextStyle(fontSize: 16)),
             ],
           ),
         ),
@@ -296,5 +331,63 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
     } else {
       log('Error loading user data: ${response.statusCode}');
     }
+  }
+
+  Future<void> loadDataProduct() async {
+    var config = await Configuration.getConfig();
+    var url = config['apiEndpoint'];
+
+    final datapro = await http.get(Uri.parse("$url/product/get-all"));
+    log('Requesting URL: $url');
+    log(datapro.body);
+
+    if (datapro.statusCode == 200) {
+      data = getAllProductFromJson(datapro.body);
+
+      setState(() {});
+    } else {
+      log('Error loading user data: ${datapro.statusCode}');
+    }
+  }
+
+  /// Determine the current position of the device.
+  ///
+  /// When the location services are not enabled or permissions
+  /// are denied the `Future` will return an error.
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
   }
 }
