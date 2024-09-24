@@ -379,7 +379,7 @@ class _RegisterRiderPageState extends State<RegisterRiderPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => HomeRiderPage(
-                              uid: res.user.rid,
+                              rid: res.user.rid,
                             ),
                           ),
                         );
