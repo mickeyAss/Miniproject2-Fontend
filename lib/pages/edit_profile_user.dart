@@ -208,268 +208,274 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(top: 120),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                const Center(
-                                  child: Text(
-                                    "ข้อมูลส่วนตัว",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
+                          child: Column(
+                            children: [
+                              const Center(
+                                child: Text(
+                                  "ข้อมูลส่วนตัว",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Padding(
+                                                    padding:
+                                                        EdgeInsets.only(left: 10),
+                                                    child: Text(
+                                                      "ชื่อ",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                  TextField(
+                                                    decoration: InputDecoration(
+                                                      hintText: user.name,
+                                                      hintStyle: const TextStyle(
+                                                          color: Colors.black26),
+                                                      border: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(10),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                                width: 10), // ระยะห่างระหว่างช่องกรอก
+                                                                
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Padding(
+                                                    padding:
+                                                        EdgeInsets.only(left: 10),
+                                                    child: Text(
+                                                      "นามสกุล",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                  TextField(
+                                                    decoration: InputDecoration(
+                                                      hintText: user.lastname,
+                                                      hintStyle: const TextStyle(
+                                                          color: Colors.black26),
+                                                      border: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(10),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Padding(
+                                              padding: EdgeInsets.only(left: 10),
+                                              child: Text(
+                                                "ที่อยู่",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                            ),
+                                            TextField(
+                                              decoration: InputDecoration(
+                                                  hintText: user.address,
+                                                  hintStyle: const TextStyle(
+                                                      color: Colors.black26),
+                                                  border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(10))),
+                                              minLines: 1,
+                                              maxLines: null,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Padding(
+                                                    padding:
+                                                        EdgeInsets.only(left: 10),
+                                                    child: Text(
+                                                      "พิกัดละติจูด",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                  TextField(
+                                                    decoration: InputDecoration(
+                                                      hintText: user.latitude,
+                                                      hintStyle: const TextStyle(
+                                                          color: Colors.black26),
+                                                      border: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(10),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                                width: 10), // ระยะห่างระหว่างช่องกรอก
+                                                                
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Padding(
+                                                    padding:
+                                                        EdgeInsets.only(left: 10),
+                                                    child: Text(
+                                                      "พิกัดลองติจูด",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                  TextField(
+                                                    decoration: InputDecoration(
+                                                      hintText: user.longitude,
+                                                      hintStyle: const TextStyle(
+                                                          color: Colors.black26),
+                                                      border: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(10),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Padding(
+                                              padding: EdgeInsets.only(left: 10),
+                                              child: Text(
+                                                "รหัสผ่าน",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                            ),
+                                            TextField(
+                                              decoration: InputDecoration(
+                                                  hintText:
+                                                      "ใส่รหัสผ่านที่ต้องการเปลี่ยน",
+                                                  hintStyle: const TextStyle(
+                                                      color: Colors.black26),
+                                                  border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(10))),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Padding(
+                                              padding: EdgeInsets.only(left: 10),
+                                              child: Text(
+                                                "ยืนยันรหัสผ่าน",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                            ),
+                                            TextField(
+                                              decoration: InputDecoration(
+                                                  hintText:
+                                                      "ใส่รหัสผ่านใหม่อีกครั้งเพื่อทำการยืนยัน",
+                                                  hintStyle: const TextStyle(
+                                                      color: Colors.black26),
+                                                  border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(10))),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(0, 10, 20, 0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    SizedBox(
+                                      width: 100,
+                                      child: FilledButton(
+                                        style: FilledButton.styleFrom(
+                                          backgroundColor:
+                                              const Color.fromARGB(
+                                                  255, 72, 0, 0),
+                                        ),
+                                        onPressed: () {
+                                          Get.to(() => EditProfileUserPage(
+                                              uid: widget.uid));
+                                        },
+                                        child: const Text("บันทึก"),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 10),
-                                              child: Text(
-                                                "ชื่อ",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
-                                            TextField(
-                                              decoration: InputDecoration(
-                                                hintText: user.name,
-                                                hintStyle: const TextStyle(
-                                                    color: Colors.black26),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                          width: 10), // ระยะห่างระหว่างช่องกรอก
-
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 10),
-                                              child: Text(
-                                                "นามสกุล",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
-                                            TextField(
-                                              decoration: InputDecoration(
-                                                hintText: user.lastname,
-                                                hintStyle: const TextStyle(
-                                                    color: Colors.black26),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Padding(
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: Text(
-                                          "ที่อยู่",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      TextField(
-                                        decoration: InputDecoration(
-                                            hintText: user.address,
-                                            hintStyle: const TextStyle(
-                                                color: Colors.black26),
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10))),
-                                        minLines: 1,
-                                        maxLines: null,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 10),
-                                              child: Text(
-                                                "พิกัดละติจูด",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
-                                            TextField(
-                                              decoration: InputDecoration(
-                                                hintText: user.latitude,
-                                                hintStyle: const TextStyle(
-                                                    color: Colors.black26),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                          width: 10), // ระยะห่างระหว่างช่องกรอก
-
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 10),
-                                              child: Text(
-                                                "พิกัดลองติจูด",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
-                                            TextField(
-                                              decoration: InputDecoration(
-                                                hintText: user.longitude,
-                                                hintStyle: const TextStyle(
-                                                    color: Colors.black26),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Padding(
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: Text(
-                                          "รหัสผ่าน",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      TextField(
-                                        decoration: InputDecoration(
-                                            hintText:
-                                                "ใส่รหัสผ่านที่ต้องการเปลี่ยน",
-                                            hintStyle: const TextStyle(
-                                                color: Colors.black26),
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10))),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Padding(
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: Text(
-                                          "ยืนยันรหัสผ่าน",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      TextField(
-                                        decoration: InputDecoration(
-                                            hintText:
-                                                "ใส่รหัสผ่านใหม่อีกครั้งเพื่อทำการยืนยัน",
-                                            hintStyle: const TextStyle(
-                                                color: Colors.black26),
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10))),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 20, 0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      SizedBox(
-                                        width: 100,
-                                        child: FilledButton(
-                                          style: FilledButton.styleFrom(
-                                            backgroundColor:
-                                                const Color.fromARGB(
-                                                    255, 72, 0, 0),
-                                          ),
-                                          onPressed: () {
-                                            Get.to(() => EditProfileUserPage(
-                                                uid: widget.uid));
-                                          },
-                                          child: const Text("บันทึก"),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
+                              )
+                            ],
                           ),
                         ),
                       ),
