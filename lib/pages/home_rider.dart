@@ -42,29 +42,29 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'หน้าหลัก',
           style: TextStyle(
               fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Color.fromARGB(255, 72, 0, 0),
-        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: const Color.fromARGB(255, 72, 0, 0),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              decoration: BoxDecoration(color: Color.fromARGB(255, 72, 0, 0)),
+              decoration: const BoxDecoration(color: Color.fromARGB(255, 72, 0, 0)),
               child: FutureBuilder(
                 future: loadData_Rider,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return Center(child: Text('Error loading user data'));
+                    return const Center(child: Text('Error loading user data'));
                   }
 
                   return Column(
@@ -80,20 +80,20 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Row(
                         children: [
                           Text(
                             rider.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 5),
                           Text(
                             rider.lastname,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold),
@@ -107,34 +107,34 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
             ),
             // เมนูใน Drawer
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text('หน้าหลัก'),
+              leading: const Icon(Icons.home),
+              title: const Text('หน้าหลัก'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.person),
-              title: Text('โปรไฟล์'),
+              leading: const Icon(Icons.person),
+              title: const Text('โปรไฟล์'),
               onTap: () {
                 // Get.to(() => ProfileUser(uid: widget.uid));
               },
             ),
             ListTile(
-              leading: Icon(Icons.pin_drop_rounded),
-              title: Text('ที่อยู่'),
+              leading: const Icon(Icons.pin_drop_rounded),
+              title: const Text('ที่อยู่'),
               onTap: () {},
             ),
-            Divider(),
+            const Divider(),
             ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('ออกจากระบบ'),
+              leading: const Icon(Icons.logout),
+              title: const Text('ออกจากระบบ'),
               onTap: () {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Center(
+                      title: const Center(
                         child: Text('ยืนยันการออกจากระบบ',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 17)),
@@ -144,14 +144,14 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             OutlinedButton(
-                              child: Text('ยกเลิก',
+                              child: const Text('ยกเลิก',
                                   style: TextStyle(
                                       color: Color.fromARGB(255, 72, 0, 0))),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
                               style: OutlinedButton.styleFrom(
-                                side: BorderSide(
+                                side: const BorderSide(
                                     color: Color.fromARGB(255, 72, 0, 0),
                                     width: 2.0),
                                 shape: RoundedRectangleBorder(
@@ -159,18 +159,18 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                               ),
                             ),
                             FilledButton(
-                              child: Text('ยืนยัน'),
+                              child: const Text('ยืนยัน'),
                               style: FilledButton.styleFrom(
-                                backgroundColor: Color.fromARGB(255, 72, 0, 0),
+                                backgroundColor: const Color.fromARGB(255, 72, 0, 0),
                                 foregroundColor: Colors.white,
-                                textStyle: TextStyle(fontSize: 14),
+                                textStyle: const TextStyle(fontSize: 14),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0)),
                                 elevation: 5,
                               ),
                               onPressed: () {
                                 gs.remove('rid');
-                                Get.offAll(() => SelectLoginPage());
+                                Get.offAll(() => const SelectLoginPage());
                               },
                             ),
                           ],
@@ -185,7 +185,7 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
         ),
       ),
       body: Container(
-        color: Color.fromARGB(255, 72, 0, 0),
+        color: const Color.fromARGB(255, 72, 0, 0),
         width: double.infinity,
         height: double.infinity,
         child: Center(
@@ -202,9 +202,9 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                       context: context,
                       isScrollControlled: true,
                       backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                         borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(20)),
+                            BorderRadius.vertical(top: const Radius.circular(20)),
                       ),
                       builder: (context) {
                         return Padding(
@@ -219,24 +219,24 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                                   padding: const EdgeInsets.all(20.0),
                                   child: Column(
                                     children: [
-                                      Text(
+                                      const Text(
                                         'รายการงาน',
                                         style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      SizedBox(height: 20),
+                                      const SizedBox(height: 20),
                                       FutureBuilder(
                                         future:
                                             loadData_product, // เรียกฟังก์ชันที่ดึงข้อมูล
                                         builder: (context, snapshot) {
                                           if (snapshot.connectionState ==
                                               ConnectionState.waiting) {
-                                            return Center(
+                                            return const Center(
                                                 child:
                                                     CircularProgressIndicator());
                                           } else if (snapshot.hasError) {
-                                            return Center(
+                                            return const Center(
                                                 child: Text('เกิดข้อผิดพลาด'));
                                           } else {
                                             return SingleChildScrollView(
@@ -246,7 +246,7 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                                                     title: Text(e.proName),
                                                     children: <Widget>[
                                                       ListTile(
-                                                        title: Text(
+                                                        title: const Text(
                                                             'รายละเอียดสินค้า'),
                                                         subtitle: Column(
                                                           crossAxisAlignment:
@@ -280,12 +280,12 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                                           }
                                         },
                                       ),
-                                      SizedBox(height: 20),
+                                      const SizedBox(height: 20),
                                       ElevatedButton(
                                         onPressed: () {
                                           Navigator.pop(context); // ปิด modal
                                         },
-                                        child: Text('ปิด'),
+                                        child: const Text('ปิด'),
                                       ),
                                     ],
                                   ),
@@ -311,7 +311,7 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                       children: [
                         Image.asset('assets/images/box.png',
                             width: 100, height: 100),
-                        Text('รายการงาน', style: TextStyle(fontSize: 16)),
+                        const Text('รายการงาน', style: TextStyle(fontSize: 16)),
                       ],
                     ),
                   ),
