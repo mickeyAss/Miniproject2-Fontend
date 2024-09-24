@@ -57,18 +57,18 @@ class _SendRederPageState extends State<SendRederPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('GPS นำทาง'),
+        title: const Text('GPS นำทาง'),
         actions: [
           IconButton(
-            icon: Icon(Icons.cancel),
+            icon: const Icon(Icons.cancel),
             onPressed: _cancelTracking, // เรียกฟังก์ชันเมื่อกดปุ่ม Cancel
           ),
         ],
       ),
       body: latLng == null // เช็คว่า latLng ถูกตั้งค่าแล้วหรือไม่
-          ? Center(
+          ? const Center(
               child:
-                  CircularProgressIndicator()) // แสดงวงกลมโหลดหากยังไม่มีตำแหน่ง
+                  const CircularProgressIndicator()) // แสดงวงกลมโหลดหากยังไม่มีตำแหน่ง
           : Column(
               children: [
                 Expanded(
@@ -95,10 +95,10 @@ class _SendRederPageState extends State<SendRederPage> {
                             point: latLng!, // ใช้ตำแหน่งปัจจุบัน
                             width: 40,
                             height: 40,
-                            child: Icon(
+                            child: const Icon(
                               Icons.navigation,
                               size: 40,
-                              color: const Color.fromARGB(255, 195, 0, 0),
+                              color: Color.fromARGB(255, 195, 0, 0),
                             ),
                           ),
                         ],
