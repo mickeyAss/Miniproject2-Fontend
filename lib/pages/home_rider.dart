@@ -192,49 +192,6 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              FutureBuilder(
-                future: loadData_product,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('เกิดข้อผิดพลาด'));
-                  } else {
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: data.map<Widget>((e) {
-                          return ExpansionTile(
-                            title: Text(e.proName),
-                            children: <Widget>[
-                              ListTile(
-                                title: Text('รายละเอียดสินค้า'),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(e.proDetail),
-                                    Text('เลขพัสดุ : ${e.trackingNumber}')
-                                  ],
-                                ),
-                              ),
-                              FilledButton(
-                                onPressed: () async {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SendRederPage(),
-                                    ),
-                                  );
-                                },
-                                child: const Text('รับงาน'),
-                              ),
-                            ],
-                          );
-                        }).toList(),
-                      ),
-                    );
-                  }
-                },
-              ),
               // ปุ่มรายการพัสดุ
               SizedBox(
                 width: 200,
@@ -243,8 +200,7 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                   onPressed: () {
                     showModalBottomSheet(
                       context: context,
-                      isScrollControlled:
-                          true, // ให้ modal สามารถขยายได้เต็มหน้าจอ
+                      isScrollControlled: true,
                       backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -252,15 +208,13 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                       ),
                       builder: (context) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal:
-                                  20.0), // ปรับขนาดความกว้างด้วย Padding
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: FractionallySizedBox(
-                            heightFactor: 0.9, // ความสูง modal 90% ของจอ
-                            widthFactor: 10, // ความกว้าง modal 80% ของจอ
+                            heightFactor: 0.9,
+                            widthFactor: 1.0,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
+                              children: [
                                 Padding(
                                   padding: const EdgeInsets.all(20.0),
                                   child: Column(
@@ -272,7 +226,60 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       SizedBox(height: 20),
-                                      Text('sssssssss'),
+                                      FutureBuilder(
+                                        future:
+                                            loadData_product, // เรียกฟังก์ชันที่ดึงข้อมูล
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Center(
+                                                child:
+                                                    CircularProgressIndicator());
+                                          } else if (snapshot.hasError) {
+                                            return Center(
+                                                child: Text('เกิดข้อผิดพลาด'));
+                                          } else {
+                                            return SingleChildScrollView(
+                                              child: Column(
+                                                children: data.map<Widget>((e) {
+                                                  return ExpansionTile(
+                                                    title: Text(e.proName),
+                                                    children: <Widget>[
+                                                      ListTile(
+                                                        title: Text(
+                                                            'รายละเอียดสินค้า'),
+                                                        subtitle: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(e.proDetail),
+                                                            Text(
+                                                                'เลขพัสดุ: ${e.trackingNumber}'),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      FilledButton(
+                                                        onPressed: () async {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  SendRederPage(),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: const Text(
+                                                            'รับงาน'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                }).toList(),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      ),
                                       SizedBox(height: 20),
                                       ElevatedButton(
                                         onPressed: () {
@@ -295,7 +302,8 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                     foregroundColor: Colors.black,
                     elevation: 15,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0)),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
                   child: Center(
                     child: Column(
@@ -339,9 +347,8 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                 ],
               ),
 
-               FilledButton(
-		onPressed: () {},
-		child: const Text('Start Real-time Get')),
+              FilledButton(
+                  onPressed: () {}, child: const Text('Start Real-time Get')),
             ],
           ),
         ),
