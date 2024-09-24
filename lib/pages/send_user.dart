@@ -86,22 +86,26 @@ class _SendUserPageState extends State<SendUserPage> {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: ListView.separated(
                 shrinkWrap: true,
-                itemCount: suggestions.length,
+                itemCount:
+                    suggestions.where((user) => user.uid != widget.uid).length,
                 separatorBuilder: (context, index) =>
                     Divider(), // เส้นกั้นระหว่างข้อมูล
                 itemBuilder: (context, index) {
+                  final filteredSuggestions = suggestions
+                      .where((user) => user.uid != widget.uid)
+                      .toList();
                   return Container(
                     color: const Color.fromARGB(
                         255, 255, 255, 255), // สีพื้นหลังของรายการ
                     child: ListTile(
-                      title: Text(suggestions[index].address),
+                      title: Text(filteredSuggestions[index].address),
                       onTap: () {
                         // เมื่อเลือกข้อมูล ส่ง uid ไปยัง NextPage
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => SendProductPage(
-                              uid: suggestions[index].uid,
+                              uid: filteredSuggestions[index].uid,
                               myuid: widget.uid,
                             ),
                           ),

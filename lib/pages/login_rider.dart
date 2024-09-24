@@ -1,8 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:http/http.dart' as http;
+import 'package:get_storage/get_storage.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:fontend_miniproject2/config/config.dart';
+import 'package:fontend_miniproject2/pages/home_user.dart';
 import 'package:fontend_miniproject2/pages/home_rider.dart';
 import 'package:fontend_miniproject2/pages/register_rider.dart';
 import 'package:fontend_miniproject2/models/login_user_request.dart';
@@ -19,6 +24,25 @@ class LoginRiderPage extends StatefulWidget {
 class _LoginRiderPageState extends State<LoginRiderPage> {
   TextEditingController phoneNoCt1 = TextEditingController();
   TextEditingController passwordNoCt1 = TextEditingController();
+
+  GetStorage gs = GetStorage();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (gs.read('rid') != null) {
+      log(gs.read('rid').toString());
+      //รอให้หน้านี้โหลดก่อนค่อย redirec
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        Get.to(
+          () => HomeRiderPage(
+            rid: gs.read('rid'),
+          ),
+        );
+      });
+    } else {}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -221,11 +245,13 @@ class _LoginRiderPageState extends State<LoginRiderPage> {
         var responseData =
             loginRiderResponeFromJson(response.body); // เปลี่ยนตรงนี้
         if (responseData.message == 'Login successful') {
+          gs.write('rid',
+              responseData.rider.rid); //ถ้าlogin ผ่านให้เก็บ username ไว้ในระบบ
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => HomeRiderPage(
-                uid: responseData.rider.rid, // เปลี่ยนตรงนี้
+                rid: responseData.rider.rid, // เปลี่ยนตรงนี้
               ),
             ),
           );
