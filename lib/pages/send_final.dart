@@ -73,96 +73,146 @@ class _SendFinalPageState extends State<SendFinalPage> {
                   return Text('Error: ${snapshot.error}');
                 }
                 return SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      if (data.isNotEmpty)
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  'ผู้ส่ง: ${data[0].name} ${data[0].lastname}',
-                                  style: const TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      Row(
-                        children: [
-                          Text(
-                            'เบอร์ ${data[0].phone}',
-                            style: const TextStyle(fontSize: 15),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border:
+                          Border.all(color: Colors.grey, width: 2), // ขอบกรอบ
+                      borderRadius: BorderRadius.circular(8), // มุมโค้ง
+                    ),
+                    padding: const EdgeInsets.all(10), // ระยะห่างภายใน
+                    child: Column(
+                      children: [
+                        if (data.isNotEmpty)
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'ผู้ส่ง: ${data[0].name} ${data[0].lastname}',
+                                    style: const TextStyle(fontSize: 15),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '${data[0].phone}',
+                                    style: const TextStyle(
+                                        fontSize: 15, color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    '${data[0].address}',
+                                    style: const TextStyle(
+                                        fontSize: 15, color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              // เพิ่มเส้นขั้นที่นี่
+                              const Divider(
+                                  height: 30,
+                                  thickness: 1,
+                                  color: Colors.grey), // เส้นขั้น
+                            ],
                           ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            'ที่อยู่: ${data[0].address}',
-                            style: const TextStyle(fontSize: 15),
+                        if (data.length > 1)
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'ผู้รับ: ${data[1].name} ${data[1].lastname}',
+                                    style: const TextStyle(fontSize: 15),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '${data[1].phone}',
+                                    style: const TextStyle(
+                                        fontSize: 15, color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    '${data[1].address}',
+                                    style: const TextStyle(
+                                        fontSize: 15, color: Colors.black54),
+                                    softWrap: true,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      if (data.length > 1)
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  'ผู้รับ: ${data[1].name} ${data[1].lastname}',
-                                  style: const TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      Row(
-                        children: [
-                          Text(
-                            'เบอร์ ${data[1].phone}',
-                            style: const TextStyle(fontSize: 15),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            'ที่อยู่: ${data[1].address}',
-                            style: const TextStyle(fontSize: 15),
-                            softWrap: true,
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },
             ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              child: Text(
+                "รายการพัสดุ",
+                style:
+                    TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
             const SizedBox(height: 10),
-            Text(
-              'ชื่อพัสดุ: ${widget.nameProduct}',
-              style: const TextStyle(fontSize: 15),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey, width: 2), // ขอบกรอบ
+                borderRadius: BorderRadius.circular(8), // มุมโค้ง
+              ),
+              padding: const EdgeInsets.fromLTRB(10, 10, 150, 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
+                  Text(
+                    'ชื่อพัสดุ: ${widget.nameProduct}',
+                    style: const TextStyle(fontSize: 15),
+                  ),
+                  Text(
+                    'รายละเอียด: ${widget.detailProduct}',
+                    style: const TextStyle(fontSize: 15),
+                  ),
+                  const SizedBox(height: 10),
+                  widget.image != null
+                      ? Image.file(
+                          File(widget.image!.path),
+                          width: 200,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        )
+                      : const Text('ไม่มีรูปภาพ'),
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
-            Text(
-              'รายละเอียด: ${widget.detailProduct}',
-              style: const TextStyle(fontSize: 15),
-            ),
-            const SizedBox(height: 10),
-            widget.image != null
-                ? Image.file(
-                    File(widget.image!.path),
-                    width: 200,
-                    height: 200,
-                    fit: BoxFit.cover,
-                  )
-                : const Text('ไม่มีรูปภาพ'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: addProduct,
-              child: const Text('ยืนยันการส่ง'),
-            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FilledButton(
+                style: FilledButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 72, 0, 0),
+                    padding: const EdgeInsets.symmetric(horizontal: 150, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    )),
+                onPressed: addProduct,
+                child: const Text("ถัดไป"))
           ],
         ),
       ),
@@ -210,7 +260,7 @@ class _SendFinalPageState extends State<SendFinalPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Center(
+            title: const Center(
               child: Text(
                 'ติดตามการจัดส่ง',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
@@ -221,11 +271,11 @@ class _SendFinalPageState extends State<SendFinalPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   FilledButton(
-                    child: Text('ตกลง'),
+                    child: const Text('ตกลง'),
                     style: FilledButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 0, 0, 0),
+                      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
                       foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-                      textStyle: TextStyle(fontSize: 14),
+                      textStyle: const TextStyle(fontSize: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
