@@ -225,8 +225,8 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                                   child: Column(
                                     children: [
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            20, 10, 20, 0),
                                         child: Row(
                                           children: [
                                             Expanded(
@@ -235,8 +235,8 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   const Padding(
-                                                    padding:
-                                                        EdgeInsets.only(left: 10),
+                                                    padding: EdgeInsets.only(
+                                                        left: 10),
                                                     child: Text(
                                                       "ชื่อ",
                                                       style: TextStyle(
@@ -247,11 +247,15 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                                                   TextField(
                                                     decoration: InputDecoration(
                                                       hintText: user.name,
-                                                      hintStyle: const TextStyle(
-                                                          color: Colors.black26),
-                                                      border: OutlineInputBorder(
+                                                      hintStyle:
+                                                          const TextStyle(
+                                                              color: Colors
+                                                                  .black26),
+                                                      border:
+                                                          OutlineInputBorder(
                                                         borderRadius:
-                                                            BorderRadius.circular(10),
+                                                            BorderRadius
+                                                                .circular(10),
                                                       ),
                                                     ),
                                                   ),
@@ -259,16 +263,17 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                                               ),
                                             ),
                                             const SizedBox(
-                                                width: 10), // ระยะห่างระหว่างช่องกรอก
-                                                                
+                                                width:
+                                                    10), // ระยะห่างระหว่างช่องกรอก
+
                                             Expanded(
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   const Padding(
-                                                    padding:
-                                                        EdgeInsets.only(left: 10),
+                                                    padding: EdgeInsets.only(
+                                                        left: 10),
                                                     child: Text(
                                                       "นามสกุล",
                                                       style: TextStyle(
@@ -279,11 +284,15 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                                                   TextField(
                                                     decoration: InputDecoration(
                                                       hintText: user.lastname,
-                                                      hintStyle: const TextStyle(
-                                                          color: Colors.black26),
-                                                      border: OutlineInputBorder(
+                                                      hintStyle:
+                                                          const TextStyle(
+                                                              color: Colors
+                                                                  .black26),
+                                                      border:
+                                                          OutlineInputBorder(
                                                         borderRadius:
-                                                            BorderRadius.circular(10),
+                                                            BorderRadius
+                                                                .circular(10),
                                                       ),
                                                     ),
                                                   ),
@@ -294,18 +303,20 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                                         ),
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            20, 10, 20, 0),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             const Padding(
-                                              padding: EdgeInsets.only(left: 10),
+                                              padding:
+                                                  EdgeInsets.only(left: 10),
                                               child: Text(
                                                 "ที่อยู่",
                                                 style: TextStyle(
-                                                    fontWeight: FontWeight.bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                             ),
                                             TextField(
@@ -315,7 +326,8 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                                                       color: Colors.black26),
                                                   border: OutlineInputBorder(
                                                       borderRadius:
-                                                          BorderRadius.circular(10))),
+                                                          BorderRadius.circular(
+                                                              10))),
                                               minLines: 1,
                                               maxLines: null,
                                             ),
@@ -323,8 +335,8 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                                         ),
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            20, 10, 20, 0),
                                         child: Row(
                                           children: [
                                             Expanded(
@@ -333,8 +345,8 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   const Padding(
-                                                    padding:
-                                                        EdgeInsets.only(left: 10),
+                                                    padding: EdgeInsets.only(
+                                                        left: 10),
                                                     child: Text(
                                                       "พิกัดละติจูด",
                                                       style: TextStyle(
@@ -344,12 +356,17 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                                                   ),
                                                   TextField(
                                                     decoration: InputDecoration(
-                                                      hintText: user.latitude,
-                                                      hintStyle: const TextStyle(
-                                                          color: Colors.black26),
-                                                      border: OutlineInputBorder(
+                                                      hintText: user.latitude
+                                                          .toString(),
+                                                      hintStyle:
+                                                          const TextStyle(
+                                                              color: Colors
+                                                                  .black26),
+                                                      border:
+                                                          OutlineInputBorder(
                                                         borderRadius:
-                                                            BorderRadius.circular(10),
+                                                            BorderRadius
+                                                                .circular(10),
                                                       ),
                                                     ),
                                                   ),
@@ -357,16 +374,17 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                                               ),
                                             ),
                                             const SizedBox(
-                                                width: 10), // ระยะห่างระหว่างช่องกรอก
-                                                                
+                                                width:
+                                                    10), // ระยะห่างระหว่างช่องกรอก
+
                                             Expanded(
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   const Padding(
-                                                    padding:
-                                                        EdgeInsets.only(left: 10),
+                                                    padding: EdgeInsets.only(
+                                                        left: 10),
                                                     child: Text(
                                                       "พิกัดลองติจูด",
                                                       style: TextStyle(
@@ -376,12 +394,17 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                                                   ),
                                                   TextField(
                                                     decoration: InputDecoration(
-                                                      hintText: user.longitude,
-                                                      hintStyle: const TextStyle(
-                                                          color: Colors.black26),
-                                                      border: OutlineInputBorder(
+                                                      hintText: user.longitude
+                                                          .toString(),
+                                                      hintStyle:
+                                                          const TextStyle(
+                                                              color: Colors
+                                                                  .black26),
+                                                      border:
+                                                          OutlineInputBorder(
                                                         borderRadius:
-                                                            BorderRadius.circular(10),
+                                                            BorderRadius
+                                                                .circular(10),
                                                       ),
                                                     ),
                                                   ),
@@ -392,18 +415,20 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                                         ),
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            20, 10, 20, 0),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             const Padding(
-                                              padding: EdgeInsets.only(left: 10),
+                                              padding:
+                                                  EdgeInsets.only(left: 10),
                                               child: Text(
                                                 "รหัสผ่าน",
                                                 style: TextStyle(
-                                                    fontWeight: FontWeight.bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                             ),
                                             TextField(
@@ -414,24 +439,27 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                                                       color: Colors.black26),
                                                   border: OutlineInputBorder(
                                                       borderRadius:
-                                                          BorderRadius.circular(10))),
+                                                          BorderRadius.circular(
+                                                              10))),
                                             ),
                                           ],
                                         ),
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            20, 10, 20, 0),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             const Padding(
-                                              padding: EdgeInsets.only(left: 10),
+                                              padding:
+                                                  EdgeInsets.only(left: 10),
                                               child: Text(
                                                 "ยืนยันรหัสผ่าน",
                                                 style: TextStyle(
-                                                    fontWeight: FontWeight.bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                             ),
                                             TextField(
@@ -442,7 +470,8 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                                                       color: Colors.black26),
                                                   border: OutlineInputBorder(
                                                       borderRadius:
-                                                          BorderRadius.circular(10))),
+                                                          BorderRadius.circular(
+                                                              10))),
                                             ),
                                           ],
                                         ),
@@ -461,9 +490,8 @@ class _EditProfileUserPageState extends State<EditProfileUserPage> {
                                       width: 100,
                                       child: FilledButton(
                                         style: FilledButton.styleFrom(
-                                          backgroundColor:
-                                              const Color.fromARGB(
-                                                  255, 72, 0, 0),
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 72, 0, 0),
                                         ),
                                         onPressed: () {
                                           Get.to(() => EditProfileUserPage(

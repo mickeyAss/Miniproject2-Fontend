@@ -15,7 +15,7 @@ class SendUserPage extends StatefulWidget {
 }
 
 class _SendUserPageState extends State<SendUserPage> {
-  TextEditingController _addressController = TextEditingController();
+  TextEditingController phone = TextEditingController();
   String searchResult = 'กรุณากรอกที่อยู่';
   List<SearchUserRespone> suggestions = [];
 
@@ -51,7 +51,7 @@ class _SendUserPageState extends State<SendUserPage> {
           Padding(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
             child: TextField(
-              controller: _addressController,
+              controller: phone,
               decoration: InputDecoration(
                 hintText: "กรอกเบอร์โทรศัพท์เพื่อค้นหาผู้รับ",
                 hintStyle: TextStyle(
@@ -66,8 +66,8 @@ class _SendUserPageState extends State<SendUserPage> {
                 suffixIcon: IconButton(
                   icon: Icon(Icons.search, color: Colors.black38),
                   onPressed: () {
-                    String address = _addressController.text;
-                    _performSearch(address);
+                    String phone_phone = phone.text;
+                    _performSearch(phone_phone);
                   },
                 ),
                 contentPadding:
@@ -149,7 +149,7 @@ class _SendUserPageState extends State<SendUserPage> {
     if (address.isNotEmpty) {
       var config = await Configuration.getConfig();
       var url = config['apiEndpoint'];
-      var data = Uri.parse('$url/user/search-address/$address');
+      var data = Uri.parse('$url/user/search-phone/$address');
       var response = await http.get(data);
 
       if (response.statusCode == 200) {
@@ -174,7 +174,7 @@ class _SendUserPageState extends State<SendUserPage> {
     if (query.isNotEmpty) {
       var config = await Configuration.getConfig();
       var url = config['apiEndpoint'];
-      var data = Uri.parse('$url/user/search-address/$query');
+      var data = Uri.parse('$url/user/search-phone/$query');
       var response = await http.get(data);
 
       if (response.statusCode == 200) {

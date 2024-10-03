@@ -8,6 +8,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:fontend_miniproject2/config/config.dart';
 import 'package:fontend_miniproject2/pages/home_user.dart';
+import 'package:fontend_miniproject2/pages/select_login.dart';
 import 'package:fontend_miniproject2/pages/register_user.dart';
 import 'package:fontend_miniproject2/models/login_user_respone.dart';
 import 'package:fontend_miniproject2/models/login_user_request.dart';
@@ -53,6 +54,17 @@ class _LoginUserPageState extends State<LoginUserPage> {
               color: const Color.fromARGB(255, 128, 128, 128)),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      SelectLoginPage()), // เปลี่ยน HomePage เป็นหน้าหลักของคุณ
+              (Route<dynamic> route) => false,
+            );
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
