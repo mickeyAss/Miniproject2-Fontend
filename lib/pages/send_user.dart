@@ -15,7 +15,7 @@ class SendUserPage extends StatefulWidget {
 }
 
 class _SendUserPageState extends State<SendUserPage> {
-  TextEditingController _phoneController = TextEditingController();
+  TextEditingController phone = TextEditingController();
   String searchResult = 'กรุณากรอกที่อยู่';
   List<SearchUserRespone> suggestions = [];
 
@@ -51,8 +51,7 @@ class _SendUserPageState extends State<SendUserPage> {
           Padding(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
             child: TextField(
-              controller: _phoneController,
-              keyboardType: TextInputType.phone,
+              controller: phone,
               decoration: InputDecoration(
                 hintText: "กรอกเบอร์โทรศัพท์เพื่อค้นหาผู้รับ",
                 hintStyle: TextStyle(
@@ -67,8 +66,8 @@ class _SendUserPageState extends State<SendUserPage> {
                 suffixIcon: IconButton(
                   icon: Icon(Icons.search, color: Colors.black38),
                   onPressed: () {
-                    String phone = _phoneController.text;
-                    _performSearch(phone);
+                    String phone_phone = phone.text;
+                    _performSearch(phone_phone);
                   },
                 ),
                 contentPadding:

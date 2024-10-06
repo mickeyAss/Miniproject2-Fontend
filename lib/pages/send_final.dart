@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fontend_miniproject2/config/config.dart';
 import 'package:fontend_miniproject2/pages/home_user.dart';
 import 'package:fontend_miniproject2/models/get_user2.dart';
@@ -212,7 +213,7 @@ class _SendFinalPageState extends State<SendFinalPage> {
                 style: FilledButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 72, 0, 0),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 135, vertical: 10),
+                        horizontal: 140, vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
                     )),
@@ -222,6 +223,31 @@ class _SendFinalPageState extends State<SendFinalPage> {
         ),
       ),
     );
+  }
+
+  Future<String?> uploadImage() async {
+    if (widget.image != null) {
+      try {
+        // สร้าง reference ไปยัง Firebase Storage
+        final ref =
+            FirebaseStorage.instance.ref().child('image/${widget.image!.name}');
+
+        // อัปโหลดไฟล์ไปยัง Firebase Storage
+        await ref.putFile(File(widget.image!.path));
+
+        // รับ URL ของภาพที่อัปโหลด
+        String downloadUrl = await ref.getDownloadURL();
+
+        log('Image uploaded successfully: $downloadUrl');
+        return downloadUrl; // ส่งกลับ URL
+      } catch (e) {
+        log('Error uploading image: $e');
+        return null; // ส่งกลับ null หากเกิดข้อผิดพลาด
+      }
+    } else {
+      log('No image selected');
+      return null; // ส่งกลับ null หากไม่มีรูปภาพ
+    }
   }
 
   // โหลดข้อมูล User
@@ -240,10 +266,19 @@ class _SendFinalPageState extends State<SendFinalPage> {
   }
 
   void addProduct() async {
+    // อัปโหลดภาพและรับ URL
+    String? imageUrl = await uploadImage();
+
+    // ตรวจสอบว่า imageUrl ไม่เป็น null
+    if (imageUrl == null) {
+      log('Image upload failed');
+      return; // หยุดการสมัครสมาชิกหากไม่สามารถอัปโหลดภาพได้
+    }
+
     var model = AddUserRequest(
       proName: widget.nameProduct,
       proDetail: widget.detailProduct,
-      proImg: widget.image!.path,
+      proImg: imageUrl,
       uidFkSend: data[0].uid.toString(),
       uidFkAccept: data[1].uid.toString(),
     );

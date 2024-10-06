@@ -9,6 +9,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:fontend_miniproject2/config/config.dart';
 import 'package:fontend_miniproject2/pages/home_user.dart';
 import 'package:fontend_miniproject2/pages/home_rider.dart';
+import 'package:fontend_miniproject2/pages/select_login.dart';
 import 'package:fontend_miniproject2/pages/register_rider.dart';
 import 'package:fontend_miniproject2/models/login_user_request.dart';
 import 'package:fontend_miniproject2/models/login_rider_request.dart';
@@ -56,6 +57,17 @@ class _LoginRiderPageState extends State<LoginRiderPage> {
               color: const Color.fromARGB(255, 128, 128, 128)),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      SelectLoginPage()), // เปลี่ยน HomePage เป็นหน้าหลักของคุณ
+              (Route<dynamic> route) => false,
+            );
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -191,7 +203,7 @@ class _LoginRiderPageState extends State<LoginRiderPage> {
     );
 
     // เช็คว่ามีการกรอกข้อมูลหรือไม่
-    if (model.phone.isEmpty || model.password.isEmpty) {
+    if (model.phone.trim().isEmpty || model.password.trim().isEmpty) {
       // แสดงป็อบอัพเตือนเมื่อไม่มีการกรอกข้อมูล
       showDialog(
         context: context,

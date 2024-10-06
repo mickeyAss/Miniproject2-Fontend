@@ -3,13 +3,20 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fontend_miniproject2/config/config.dart';
+import 'package:fontend_miniproject2/models/get_user2.dart';
+import 'package:fontend_miniproject2/models/get_product.dart';
+import 'package:fontend_miniproject2/models/get_data_users.dart';
 
 class SendRederPage extends StatefulWidget {
-  SendRederPage({super.key});
+  int rid = 0;
+  String traking_number = '';
+  SendRederPage({super.key, required this.rid, required this.traking_number});
 
   @override
   State<SendRederPage> createState() => _SendRederPageState();
@@ -17,10 +24,12 @@ class SendRederPage extends StatefulWidget {
 
 class _SendRederPageState extends State<SendRederPage> {
   LatLng? latLng; // ใช้เป็น nullable ก่อนเพื่อป้องกันการใช้ค่าเริ่มต้น
+
   MapController mapController = MapController();
-
+  late GetProduct getp;
+  List<GetUser2> getuser = [];
   var db = FirebaseFirestore.instance;
-
+  late Future<void> loadData;
   late StreamSubscription listener;
 
   @override
@@ -34,8 +43,13 @@ class _SendRederPageState extends State<SendRederPage> {
     super.initState();
     _loadCurrentLocation(); // เรียกฟังก์ชันที่ใช้ async
 
+    loadData = loadDataProduct();
+
+    log(widget.traking_number.toString());
+    log(widget.rid.toString());
+
     // ติดตามเอกสารใน Firestore
-    final docRef = db.collection("inbox").doc("Doc1");
+    final docRef = db.collection("inbox2").doc("Doc1");
     listener = docRef.snapshots().listen(
       (event) {
         var data = event.data();
@@ -101,6 +115,17 @@ class _SendRederPageState extends State<SendRederPage> {
                               color: Color.fromARGB(255, 195, 0, 0),
                             ),
                           ),
+                          Marker(
+                            point: LatLng(39.3551,
+                                -123.01), // ใช้ละติจูดและลองจิจูดที่ต้องการ
+                            width: 40,
+                            height: 40,
+                            child: const Icon(
+                              Icons.pin_drop, // ไอคอนที่ใช้สำหรับ Marker ใหม่
+                              size: 40,
+                              color: Colors.blue, // สีของ Marker ใหม่
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -161,7 +186,7 @@ class _SendRederPageState extends State<SendRederPage> {
   }
 
   Future<void> _updatePositionInFirestore(Position position) async {
-    await db.collection("inbox").doc("Doc1").set({
+    await db.collection("inbox2").doc("Doc1").set({
       'latitude': position.latitude,
       'longitude': position.longitude,
     });
@@ -170,5 +195,30 @@ class _SendRederPageState extends State<SendRederPage> {
   void _cancelTracking() {
     listener.cancel(); // หยุดการฟังข้อมูลจาก Firestore
     Navigator.pop(context); // กลับไปยังหน้าก่อนหน้า
+  }
+
+  Future<void> loadDataProduct() async {
+    var config = await Configuration.getConfig();
+    var url = config['apiEndpoint'];
+
+    final response =
+        await http.get(Uri.parse("$url/product/get/${widget.traking_number}"));
+    if (response.statusCode == 200) {
+      getp = getProductFromJson(response.body);
+      log(response.body);
+      setState(() {});
+    } else {
+      log('Error loading user data: ${response.statusCode}');
+    }
+
+    final user = await http
+        .get(Uri.parse("$url/user/get/${getp.uidFkSend}/${getp.uidFkAccept}"));
+    if (user.statusCode == 200) {
+      getuser = getUser2FromJson(user.body);
+      log(user.body);
+      setState(() {});
+    } else {
+      log('Error loading user data: ${user.statusCode}');
+    }
   }
 }

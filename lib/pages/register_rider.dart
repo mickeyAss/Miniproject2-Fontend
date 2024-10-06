@@ -1,8 +1,12 @@
+import 'dart:io';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fontend_miniproject2/config/config.dart';
 import 'package:fontend_miniproject2/pages/home_rider.dart';
+import 'package:fontend_miniproject2/pages/login_rider.dart';
 import 'package:fontend_miniproject2/models/register_rider_request.dart';
 import 'package:fontend_miniproject2/models/register_rider_respone.dart';
 
@@ -17,8 +21,16 @@ class _RegisterRiderPageState extends State<RegisterRiderPage> {
   TextEditingController nameNoCt1 = TextEditingController();
   TextEditingController lastnameNoCt1 = TextEditingController();
   TextEditingController phoneNoCt1 = TextEditingController();
+  TextEditingController diveNoCt1 = TextEditingController();
   TextEditingController passwordNoCt1 = TextEditingController();
   TextEditingController conpasswordNoCt1 = TextEditingController();
+
+  final ImagePicker picker = ImagePicker();
+  XFile? image;
+
+  String downloadUrl = '';
+
+  bool isUploading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +48,42 @@ class _RegisterRiderPageState extends State<RegisterRiderPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 25, bottom: 30),
-                child: Image.asset(
-                  'assets/images/sport.png',
-                  width: 50,
+            // แสดง CircularProgressIndicator เมื่อกำลังอัปโหลด
+            if (isUploading) CircularProgressIndicator(),
+            // ปุ่มสำหรับอัปโหลดภาพ
+            OutlinedButton(
+              onPressed: () async {
+                image = await picker.pickImage(source: ImageSource.gallery);
+                if (image != null) {
+                  log(image!.path.toString());
+                  setState(() {});
+                } else {
+                  log('No Image');
+                }
+              },
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(
+                  color: Color.fromARGB(255, 72, 0, 0),
                 ),
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(
+                    0), // เอา padding ออกเพื่อให้รูปเต็มปุ่ม
               ),
+              child: (image != null)
+                  ? ClipOval(
+                      // ใช้ ClipOval เพื่อให้ภาพเป็นวงกลม
+                      child: Image.file(
+                        File(image!.path),
+                        width: 100, // กำหนดขนาดของรูปที่แสดงในปุ่ม
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : const Icon(
+                      Icons.photo,
+                      color: Color.fromARGB(255, 72, 0, 0),
+                      size: 30, // ขนาดของไอคอน
+                    ),
             ),
             Row(
               children: [
@@ -114,6 +154,31 @@ class _RegisterRiderPageState extends State<RegisterRiderPage> {
                 cursorColor: Colors.green, // เปลี่ยนสีของเคอร์เซอร์
                 decoration: InputDecoration(
                   hintText: 'เบอร์มือถือ',
+                  labelStyle: TextStyle(
+                    fontSize: 15, // ปรับขนาดของ label
+                  ),
+                  border: UnderlineInputBorder(),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Colors.grey), // สีของเส้นขอบเมื่อใช้งาน
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.green,
+                    ), // สีของเส้นขอบเมื่อโฟกัส
+                  ),
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+              child: TextField(
+                controller: diveNoCt1,
+                keyboardType: TextInputType.phone,
+                cursorColor: Colors.green, // เปลี่ยนสีของเคอร์เซอร์
+                decoration: InputDecoration(
+                  hintText: 'ทะเบียนรถ',
                   labelStyle: TextStyle(
                     fontSize: 15, // ปรับขนาดของ label
                   ),
@@ -206,12 +271,45 @@ class _RegisterRiderPageState extends State<RegisterRiderPage> {
     );
   }
 
+  Future<String?> uploadImage() async {
+    if (image != null) {
+      setState(() {
+        isUploading = true; // เริ่มการอัปโหลด
+      });
+
+      try {
+        // สร้าง reference ไปยัง Firebase Storage
+        final ref =
+            FirebaseStorage.instance.ref().child('image/${image!.name}');
+
+        // อัปโหลดไฟล์ไปยัง Firebase Storage
+        await ref.putFile(File(image!.path));
+
+        // รับ URL ของภาพที่อัปโหลด
+        String downloadUrl = await ref.getDownloadURL();
+
+        log('Image uploaded successfully: $downloadUrl');
+        return downloadUrl; // ส่งกลับ URL
+      } catch (e) {
+        log('Error uploading image: $e');
+        return null; // ส่งกลับ null หากเกิดข้อผิดพลาด
+      } finally {
+        setState(() {
+          isUploading = false; // สิ้นสุดการอัปโหลด
+        });
+      }
+    } else {
+      log('No image selected');
+      return null; // ส่งกลับ null หากไม่มีรูปภาพ
+    }
+  }
+
   void register() async {
-    if (nameNoCt1.text.isEmpty ||
-        lastnameNoCt1.text.isEmpty ||
-        phoneNoCt1.text.isEmpty ||
-        passwordNoCt1.text.isEmpty ||
-        conpasswordNoCt1.text.isEmpty) {
+    if (nameNoCt1.text.trim().isEmpty ||
+        lastnameNoCt1.text.trim().isEmpty ||
+        phoneNoCt1.text.trim().isEmpty ||
+        passwordNoCt1.text.trim().isEmpty ||
+        conpasswordNoCt1.text.trim().isEmpty) {
       log('กรอกข้อมูลไม่ครบทุกช่อง');
       // แสดงป็อบอัพเตือนเมื่อไม่มีการกรอกข้อมูล
       showDialog(
@@ -291,13 +389,23 @@ class _RegisterRiderPageState extends State<RegisterRiderPage> {
       return;
     }
 
+    // อัปโหลดภาพและรับ URL
+    String? imageUrl = await uploadImage();
+
+    // ตรวจสอบว่า imageUrl ไม่เป็น null
+    if (imageUrl == null) {
+      log('Image upload failed');
+      return; // หยุดการสมัครสมาชิกหากไม่สามารถอัปโหลดภาพได้
+    }
+
     // ทำการสมัครสมาชิก
     var model = RegisterRiderRequest(
-      name: nameNoCt1.text,
-      lastname: lastnameNoCt1.text,
-      phone: phoneNoCt1.text,
-      password: passwordNoCt1.text,
-    );
+        name: nameNoCt1.text,
+        lastname: lastnameNoCt1.text,
+        phone: phoneNoCt1.text,
+        password: passwordNoCt1.text,
+        img: imageUrl,
+        carRegistration: diveNoCt1.text);
 
     var config = await Configuration.getConfig();
     var url = config['apiEndpoint'];
@@ -378,9 +486,7 @@ class _RegisterRiderPageState extends State<RegisterRiderPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => HomeRiderPage(
-                              rid: res.user.rid,
-                            ),
+                            builder: (context) => LoginRiderPage(),
                           ),
                         );
                       },
