@@ -34,6 +34,8 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
 
   String downloadUrl = '';
 
+  bool isUploading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +53,8 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            // แสดง CircularProgressIndicator เมื่อกำลังอัปโหลด
+            if (isUploading) CircularProgressIndicator(),
             OutlinedButton(
               onPressed: () async {
                 image = await picker.pickImage(source: ImageSource.gallery);
@@ -364,6 +368,10 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
 
   Future<String?> uploadImage() async {
     if (image != null) {
+      setState(() {
+        isUploading = true; // เริ่มการอัปโหลด
+      });
+
       try {
         // สร้าง reference ไปยัง Firebase Storage
         final ref =
@@ -380,6 +388,10 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
       } catch (e) {
         log('Error uploading image: $e');
         return null; // ส่งกลับ null หากเกิดข้อผิดพลาด
+      } finally {
+        setState(() {
+          isUploading = false; // สิ้นสุดการอัปโหลด
+        });
       }
     } else {
       log('No image selected');

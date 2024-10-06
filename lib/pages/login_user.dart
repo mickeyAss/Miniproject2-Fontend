@@ -200,7 +200,7 @@ class _LoginUserPageState extends State<LoginUserPage> {
     );
 
     // เช็คว่ามีการกรอกข้อมูลหรือไม่
-    if (model.phone.isEmpty || model.password.isEmpty) {
+    if (model.phone.trim().isEmpty || model.password.trim().isEmpty) {
       // แสดงป็อบอัพเตือนเมื่อไม่มีการกรอกข้อมูล
       showDialog(
         context: context,
