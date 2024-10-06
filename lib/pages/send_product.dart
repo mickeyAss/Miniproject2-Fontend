@@ -138,9 +138,24 @@ class _SendProductPageState extends State<SendProductPage> {
                       ))
                 ],
               ),
-              FilledButton(
-                onPressed: () {
-                  if (nameProduct.text.isNotEmpty &&
+             
+            ],
+          ),
+        ),
+      ),
+       bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FilledButton(
+                style: FilledButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 72, 0, 0),
+                    padding: const EdgeInsets.symmetric(horizontal: 150, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    )),
+                onPressed: (){
+                   if (nameProduct.text.isNotEmpty &&
                       detailProduct.text.isNotEmpty &&
                       image != null) {
                     Navigator.push(
@@ -162,10 +177,8 @@ class _SendProductPageState extends State<SendProductPage> {
                     );
                   }
                 },
-                child: Text('ถัดไป'),
-              )
-            ],
-          ),
+                child: const Text("ถัดไป"))
+          ],
         ),
       ),
     );

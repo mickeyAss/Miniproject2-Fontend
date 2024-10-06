@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,10 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
   TextEditingController doc1 = TextEditingController();
   TextEditingController header = TextEditingController();
   TextEditingController message = TextEditingController();
+
+  var db = FirebaseFirestore.instance;
+
+  late StreamSubscription listener;
 
   @override
   void initState() {

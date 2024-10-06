@@ -15,7 +15,7 @@ class SendUserPage extends StatefulWidget {
 }
 
 class _SendUserPageState extends State<SendUserPage> {
-  TextEditingController _addressController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
   String searchResult = 'กรุณากรอกที่อยู่';
   List<SearchUserRespone> suggestions = [];
 
@@ -51,7 +51,8 @@ class _SendUserPageState extends State<SendUserPage> {
           Padding(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
             child: TextField(
-              controller: _addressController,
+              controller: _phoneController,
+              keyboardType: TextInputType.phone,
               decoration: InputDecoration(
                 hintText: "กรอกเบอร์โทรศัพท์เพื่อค้นหาผู้รับ",
                 hintStyle: TextStyle(
@@ -66,8 +67,8 @@ class _SendUserPageState extends State<SendUserPage> {
                 suffixIcon: IconButton(
                   icon: Icon(Icons.search, color: Colors.black38),
                   onPressed: () {
-                    String address = _addressController.text;
-                    _performSearch(address);
+                    String phone = _phoneController.text;
+                    _performSearch(phone);
                   },
                 ),
                 contentPadding:
@@ -98,7 +99,13 @@ class _SendUserPageState extends State<SendUserPage> {
                     color: const Color.fromARGB(
                         255, 255, 255, 255), // สีพื้นหลังของรายการ
                     child: ListTile(
-                      title: Text(filteredSuggestions[index].address),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(filteredSuggestions[index].phone),
+                          Text(filteredSuggestions[index].address)
+                        ],
+                      ),
                       onTap: () {
                         // เมื่อเลือกข้อมูล ส่ง uid ไปยัง NextPage
                         Navigator.push(
@@ -145,11 +152,11 @@ class _SendUserPageState extends State<SendUserPage> {
     }
   }
 
-  void _performSearch(String address) async {
-    if (address.isNotEmpty) {
+  void _performSearch(String phone) async {
+    if (phone.isNotEmpty) {
       var config = await Configuration.getConfig();
       var url = config['apiEndpoint'];
-      var data = Uri.parse('$url/user/search-address/$address');
+      var data = Uri.parse('$url/user/search-phone/$phone');
       var response = await http.get(data);
 
       if (response.statusCode == 200) {
@@ -174,7 +181,7 @@ class _SendUserPageState extends State<SendUserPage> {
     if (query.isNotEmpty) {
       var config = await Configuration.getConfig();
       var url = config['apiEndpoint'];
-      var data = Uri.parse('$url/user/search-address/$query');
+      var data = Uri.parse('$url/user/search-phone/$query');
       var response = await http.get(data);
 
       if (response.statusCode == 200) {
