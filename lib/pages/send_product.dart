@@ -49,7 +49,7 @@ class _SendProductPageState extends State<SendProductPage> {
               const Padding(
                 padding: EdgeInsets.only(bottom: 10),
                 child: Text(
-                  "รายละเอียดการจัดส่ง",
+                  "กรอกรายละเอียดพัสดุ",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),

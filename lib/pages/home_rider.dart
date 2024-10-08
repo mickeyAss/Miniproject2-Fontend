@@ -47,12 +47,30 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'หน้าหลัก',
-          style: TextStyle(
-              fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FutureBuilder(
+              future: loadData_Rider,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox.shrink(); // ไม่แสดงอะไรขณะรอข้อมูล
+                } else if (snapshot.hasError) {
+                  return const Icon(Icons.error, color: Colors.white);
+                }
+                return ClipOval(
+                  child: Image.network(
+                    rider.img,
+                    width: 30, // กำหนดขนาดให้เล็กลง
+                    height: 30,
+                    fit: BoxFit.cover,
+                  ),
+                );
+              },
+            ),
+          ],
         ),
-        centerTitle: true,
+        // centerTitle: true,
         elevation: 0,
         backgroundColor: const Color.fromARGB(255, 72, 0, 0),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -199,9 +217,21 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // ปุ่มรายการพัสดุ
-              // FilledButton(onPressed: startRealtimeGet, child: Text('Get')),
-              // FilledButton(onPressed: cancelRealtimeGet, child: Text('cancle')),
+              Text(
+                'สามารถตรวจสอบงานที่ต้องการรับ\nได้จากปุ่มด่านล่าง',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              Image.asset(
+                'assets/images/1f447.gif', // เปลี่ยนเป็น path ของ GIF ของคุณ
+                width: 100, // กำหนดขนาดตามที่ต้องการ
+                height: 100, // กำหนดขนาดตามที่ต้องการ
+                fit: BoxFit.cover, // ควบคุมการตัดของภาพ
+              ),
+              SizedBox(
+                height: 20,
+              ),
               SizedBox(
                 width: 200,
                 height: 200,
@@ -234,110 +264,78 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      const SizedBox(height: 20),
-                                      // FutureBuilder(
-                                      //   future:
-                                      //       loadData_product, // เรียกฟังก์ชันที่ดึงข้อมูล
-                                      //   builder: (context, snapshot) {
-                                      //     if (snapshot.connectionState ==
-                                      //         ConnectionState.waiting) {
-                                      //       return const Center(
-                                      //           child:
-                                      //               CircularProgressIndicator());
-                                      //     } else if (snapshot.hasError) {
-                                      //       return const Center(
-                                      //           child: Text('เกิดข้อผิดพลาด'));
-                                      //     } else {
-                                      //       return SingleChildScrollView(
-                                      //         child: Column(
-                                      //           children: data.map<Widget>((e) {
-                                      //             return ExpansionTile(
-                                      //               title: Text(e.proName),
-                                      //               children: <Widget>[
-                                      //                 ListTile(
-                                      //                   title: const Text(
-                                      //                       'รายละเอียดสินค้า'),
-                                      //                   subtitle: Column(
-                                      //                     crossAxisAlignment:
-                                      //                         CrossAxisAlignment
-                                      //                             .start,
-                                      //                     children: [
-                                      //                       Text(e.proDetail),
-                                      //                       Text(
-                                      //                           'เลขพัสดุ: ${e.trackingNumber}'),
-                                      //                     ],
-                                      //                   ),
-                                      //                 ),
-                                      //                 FilledButton(
-                                      //                   onPressed: () async {
-                                      //                     // Navigator.push(
-                                      //                     //   context,
-                                      //                     //   MaterialPageRoute(
-                                      //                     //     builder: (context) =>
-                                      //                     //         SendRederPage(),
-                                      //                     //   ),
-                                      //                     // );
-                                      //                   },
-                                      //                   child: const Text(
-                                      //                       'รับงาน'),
-                                      //                 ),
-                                      //               ],
-                                      //             );
-                                      //           }).toList(),
-                                      //         ),
-                                      //       );
-                                      //     }
-                                      //   },
-                                      // ),
+
                                       const SizedBox(height: 20),
 
-                                      // ส่วนที่เพิ่มการแสดงผลข้อมูลจาก Firestore ด้วย StreamBuilder
+                                      // ใน StreamBuilder ให้ปรับปรุง onPressed ใน FilledButton
                                       StreamBuilder(
-                                          stream: FirebaseFirestore.instance
-                                              .collection('inbox')
-                                              .snapshots(),
-                                          builder: (context, snapshot) {
-                                            if (!snapshot.hasData) {
-                                              return const Center(
-                                                  child:
-                                                      CircularProgressIndicator());
-                                            }
+                                        stream: FirebaseFirestore.instance
+                                            .collection('inbox')
+                                            .where('pro_status',
+                                                isEqualTo:
+                                                    'รอไรเดอร์มารับ') // กรองเอกสารที่มี prp_status เท่ากับ "รอไรเดอร์มารับ"
+                                            .snapshots(),
+                                        builder: (context, snapshot) {
+                                          if (!snapshot.hasData) {
+                                            return const Center(
+                                                child:
+                                                    CircularProgressIndicator());
+                                          }
 
-                                            var documents = snapshot.data!
-                                                .docs; // ดึงข้อมูลเอกสารทั้งหมด
+                                          var documents = snapshot.data!.docs;
 
-                                            return ListView.builder(
-                                              shrinkWrap:
-                                                  true, // ทำให้ ListView สามารถอยู่ใน Column ได้
-                                              itemCount: documents.length,
-                                              itemBuilder: (context, index) {
-                                                var firepro =
-                                                    documents[index].data();
+                                          return ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: documents.length,
+                                            itemBuilder: (context, index) {
+                                              var firepro =
+                                                  documents[index].data();
+                                              String documentId =
+                                                  documents[index].id;
 
-                                                return ExpansionTile(
-                                                  title: Text(
-                                                      firepro['pro_name']
-                                                          .toString()),
-                                                  children: <Widget>[
-                                                    ListTile(
-                                                      title: const Text(
-                                                          'รายละเอียดสินค้า'),
-                                                      subtitle: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(firepro[
-                                                                  'pro_detail']
-                                                              .toString()),
-                                                          Text(firepro[
-                                                                  'traking_number']
-                                                              .toString()),
-                                                        ],
-                                                      ),
+                                              return ExpansionTile(
+                                                title: Row(
+                                                  children: [
+                                                    Text(firepro['pro_name']
+                                                        .toString()),
+                                                  ],
+                                                ),
+                                                children: <Widget>[
+                                                  ListTile(
+                                                    title: const Text(
+                                                      'รายละเอียดสินค้า',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
                                                     ),
-                                                    FilledButton(
-                                                      onPressed: () async {
+                                                    subtitle: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(firepro[
+                                                                'pro_detail']
+                                                            .toString()),
+                                                        Text(
+                                                            'เลขพัสดุ : ${firepro['tracking_number'].toString()}'),
+                                                        Center(
+                                                          child: Image.network(
+                                                            firepro['pro_img'],
+                                                            width: 200,
+                                                            height: 200,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  FilledButton(
+                                                    onPressed: () async {
+                                                      try {
+                                                        // อัปเดตสถานะเมื่อกดปุ่มรับงาน
+                                                        await updateProStatus(
+                                                            documentId);
+
+                                                        // เปลี่ยนหน้าไปยัง SendRederPage
                                                         Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
@@ -345,20 +343,30 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                                                                 SendRederPage(
                                                               traking_number:
                                                                   firepro[
-                                                                      'traking_number'],
+                                                                      'tracking_number'],
                                                               rid: widget.rid,
                                                             ),
                                                           ),
                                                         );
-                                                      },
-                                                      child:
-                                                          const Text('รับงาน'),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          }),
+                                                      } catch (e) {
+                                                        // จัดการข้อผิดพลาด
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          SnackBar(
+                                                              content: Text(
+                                                                  'Error updating status: $e')),
+                                                        );
+                                                      }
+                                                    },
+                                                    child: const Text('รับงาน'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -374,7 +382,7 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                     foregroundColor: Colors.black,
                     elevation: 15,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(100.0),
                     ),
                   ),
                   child: Center(
@@ -383,12 +391,16 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                       children: [
                         Image.asset('assets/images/box.png',
                             width: 100, height: 100),
-                        const Text('รายการงาน', style: TextStyle(fontSize: 16)),
                       ],
                     ),
                   ),
                 ),
               ),
+              SizedBox(
+                height: 10,
+              ),
+              const Text('รายการงาน',
+                  style: TextStyle(fontSize: 16, color: Colors.white)),
             ],
           ),
         ),
@@ -411,28 +423,14 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
     }
   }
 
-  // Future<void> loadDataProduct() async {
-  //   var config = await Configuration.getConfig();
-  //   var url = config['apiEndpoint'];
-
-  //   final datapro = await http.get(Uri.parse("$url/product/get-all"));
-  //   log('Requesting URL: $url');
-  //   log(datapro.body);
-
-  //   if (datapro.statusCode == 200) {
-  //     data = getAllProductFromJson(datapro.body);
-
-  //     setState(() {});
-  //   } else {
-  //     log('Error loading user data: ${datapro.statusCode}');
-  //   }
-  // }
-
   void startRealtimeGet() {
     final inboxCollection = db.collection("inbox");
 
-    // ฟังข้อมูลทั้งหมดในคอลเล็กชัน inbox แบบเรียลไทม์
-    inboxCollection.snapshots().listen(
+    // ฟังข้อมูลทั้งหมดในคอลเล็กชัน inbox แบบเรียลไทม์ ที่มี pro_status เป็น "รอไรเดอร์มารับ"
+    _subscription = inboxCollection
+        .where('pro_status', isEqualTo: 'รอไรเดอร์มารับ') // กรองข้อมูล
+        .snapshots()
+        .listen(
       (snapshot) {
         for (var document in snapshot.docs) {
           firepro = document.data();
@@ -447,5 +445,20 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
   void cancelRealtimeGet() {
     _subscription?.cancel();
     log('Real-time listening cancelled');
+  }
+
+  // ฟังก์ชันสำหรับอัปเดตสถานะ
+  Future<void> updateProStatus(String documentId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('inbox')
+          .doc(documentId)
+          .update({
+        'pro_status': 'รับงานแล้ว', // อัปเดตสถานะ
+      });
+      log('Status updated successfully');
+    } catch (e) {
+      log('Error updating status: $e');
+    }
   }
 }

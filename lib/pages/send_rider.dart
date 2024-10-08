@@ -71,7 +71,6 @@ class _SendRederPageState extends State<SendRederPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('GPS นำทาง'),
         actions: [
           IconButton(
             icon: const Icon(Icons.cancel),
@@ -210,7 +209,5 @@ class _SendRederPageState extends State<SendRederPage> {
     } else {
       log('Error loading user data: ${response.statusCode}');
     }
-
-   
   }
 }
