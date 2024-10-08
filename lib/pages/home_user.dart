@@ -34,29 +34,29 @@ class _HomeUserPageState extends State<HomeUserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'หน้าหลัก',
           style: TextStyle(
               fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Color.fromARGB(255, 72, 0, 0),
-        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: const Color.fromARGB(255, 72, 0, 0),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              decoration: BoxDecoration(color: Color.fromARGB(255, 72, 0, 0)),
+              decoration: const BoxDecoration(color: Color.fromARGB(255, 72, 0, 0)),
               child: FutureBuilder(
                 future: loadData_User,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return Center(child: Text('Error loading user data'));
+                    return  Center(child:  Text('Error loading user data: ${snapshot.error}'));
                   }
 
                   return Column(
@@ -72,20 +72,20 @@ class _HomeUserPageState extends State<HomeUserPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Row(
                         children: [
                           Text(
                             user.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 5),
                           Text(
                             user.lastname,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold),
@@ -99,34 +99,34 @@ class _HomeUserPageState extends State<HomeUserPage> {
             ),
             // เมนูใน Drawer
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text('หน้าหลัก'),
+              leading: const Icon(Icons.home),
+              title: const Text('หน้าหลัก'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.person),
-              title: Text('โปรไฟล์'),
+              leading: const Icon(Icons.person),
+              title: const Text('โปรไฟล์'),
               onTap: () {
                 Get.to(() => ProfileUser(uid: widget.uid));
               },
             ),
             ListTile(
-              leading: Icon(Icons.pin_drop_rounded),
-              title: Text('ที่อยู่'),
+              leading: const Icon(Icons.pin_drop_rounded),
+              title: const Text('ที่อยู่'),
               onTap: () {},
             ),
-            Divider(),
+            const Divider(),
             ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('ออกจากระบบ'),
+              leading: const Icon(Icons.logout),
+              title: const Text('ออกจากระบบ'),
               onTap: () {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Center(
+                      title: const Center(
                         child: Text('ยืนยันการออกจากระบบ',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 17)),
@@ -136,14 +136,14 @@ class _HomeUserPageState extends State<HomeUserPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             OutlinedButton(
-                              child: Text('ยกเลิก',
+                              child: const Text('ยกเลิก',
                                   style: TextStyle(
                                       color: Color.fromARGB(255, 72, 0, 0))),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
                               style: OutlinedButton.styleFrom(
-                                side: BorderSide(
+                                side: const BorderSide(
                                     color: Color.fromARGB(255, 72, 0, 0),
                                     width: 2.0),
                                 shape: RoundedRectangleBorder(
@@ -151,18 +151,18 @@ class _HomeUserPageState extends State<HomeUserPage> {
                               ),
                             ),
                             FilledButton(
-                              child: Text('ยืนยัน'),
+                              child: const Text('ยืนยัน'),
                               style: FilledButton.styleFrom(
-                                backgroundColor: Color.fromARGB(255, 72, 0, 0),
+                                backgroundColor: const Color.fromARGB(255, 72, 0, 0),
                                 foregroundColor: Colors.white,
-                                textStyle: TextStyle(fontSize: 14),
+                                textStyle: const TextStyle(fontSize: 14),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0)),
                                 elevation: 5,
                               ),
                               onPressed: () {
                                 gs.remove('uid');
-                                Get.offAll(() => SelectLoginPage());
+                                Get.offAll(() => const SelectLoginPage());
                               },
                             ),
                           ],
@@ -177,13 +177,13 @@ class _HomeUserPageState extends State<HomeUserPage> {
         ),
       ),
       body: Container(
-        color: Color.fromARGB(255, 72, 0, 0),
+        color: const Color.fromARGB(255, 72, 0, 0),
         width: double.infinity,
         height: double.infinity,
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: SizedBox(
@@ -191,7 +191,7 @@ class _HomeUserPageState extends State<HomeUserPage> {
                   child: TextField(
                     decoration: InputDecoration(
                       hintText: 'ตรวจสอบสถานะพัสดุ...',
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: const Icon(Icons.search),
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -202,7 +202,7 @@ class _HomeUserPageState extends State<HomeUserPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               // ปุ่มส่งพัสดุ
               buildActionButton('ส่งพัสดุ', 'assets/images/truck.png', () {
                 Navigator.push(
@@ -211,7 +211,7 @@ class _HomeUserPageState extends State<HomeUserPage> {
                       builder: (context) => SendUserPage(uid: widget.uid)),
                 );
               }),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               // ปุ่มรายการพัสดุ
               buildActionButton('รายการพัสดุ', 'assets/images/box.png', () {
                 Get.to(()=> ProductListUserPage(uid: widget.uid,));
@@ -242,7 +242,7 @@ class _HomeUserPageState extends State<HomeUserPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(assetPath, width: 100, height: 100),
-              Text(title, style: TextStyle(fontSize: 16)),
+              Text(title, style: const TextStyle(fontSize: 16)),
             ],
           ),
         ),

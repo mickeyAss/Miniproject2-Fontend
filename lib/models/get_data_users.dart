@@ -38,8 +38,8 @@ class GetDataUsers {
         phone: json["phone"],
         password: json["password"],
         address: json["address"],
-        latitude: json["latitude"]?.toDouble(),
-        longitude: json["longitude"]?.toDouble(),
+        latitude: json["latitude"],
+        longitude: json["longitude"],
         img: json["img"],
       );
 
