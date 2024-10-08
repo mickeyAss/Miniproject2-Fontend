@@ -71,7 +71,6 @@ class _SendRederPageState extends State<SendRederPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('GPS นำทาง'),
         actions: [
           IconButton(
             icon: const Icon(Icons.cancel),
@@ -209,16 +208,6 @@ class _SendRederPageState extends State<SendRederPage> {
       setState(() {});
     } else {
       log('Error loading user data: ${response.statusCode}');
-    }
-
-    final user = await http
-        .get(Uri.parse("$url/user/get/${getp.uidFkSend}/${getp.uidFkAccept}"));
-    if (user.statusCode == 200) {
-      getuser = getUser2FromJson(user.body);
-      log(user.body);
-      setState(() {});
-    } else {
-      log('Error loading user data: ${user.statusCode}');
     }
   }
 }

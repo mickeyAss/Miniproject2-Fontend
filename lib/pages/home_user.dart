@@ -6,8 +6,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:fontend_miniproject2/config/config.dart';
 import 'package:fontend_miniproject2/pages/send_user.dart';
 import 'package:fontend_miniproject2/pages/login_user.dart';
-import 'package:fontend_miniproject2/pages/profile_user.dart';
 import 'package:fontend_miniproject2/pages/select_login.dart';
+import 'package:fontend_miniproject2/pages/profile_user.dart';
 import 'package:fontend_miniproject2/models/get_data_users.dart';
 
 class HomeUserPage extends StatefulWidget {

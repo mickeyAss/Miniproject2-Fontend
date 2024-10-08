@@ -36,6 +36,8 @@ class _SendFinalPageState extends State<SendFinalPage> {
   List<GetUser2> data = [];
   late GetProduct pro;
 
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -107,7 +109,7 @@ class _SendFinalPageState extends State<SendFinalPage> {
                                     ),
                                   ],
                                 ),
-                                Column(
+                                Row(
                                   children: [
                                     Text(
                                       '${data[0].address}',
@@ -116,8 +118,6 @@ class _SendFinalPageState extends State<SendFinalPage> {
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 10),
-                                // เพิ่มเส้นขั้นที่นี่
                                 const Divider(
                                     height: 30,
                                     thickness: 1,
@@ -144,7 +144,7 @@ class _SendFinalPageState extends State<SendFinalPage> {
                                     ),
                                   ],
                                 ),
-                                Column(
+                                Row(
                                   children: [
                                     Text(
                                       '${data[1].address}',
@@ -209,16 +209,20 @@ class _SendFinalPageState extends State<SendFinalPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FilledButton(
-                style: FilledButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 72, 0, 0),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 140, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    )),
-                onPressed: addProduct,
-                child: const Text("ทำการจัดส่ง"))
+            isLoading
+                ? CircularProgressIndicator() // แสดงการโหลด
+                : FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 72, 0, 0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 140, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    onPressed: addProduct,
+                    child: const Text("ทำการจัดส่ง"),
+                  ),
           ],
         ),
       ),
@@ -239,6 +243,7 @@ class _SendFinalPageState extends State<SendFinalPage> {
         String downloadUrl = await ref.getDownloadURL();
 
         log('Image uploaded successfully: $downloadUrl');
+
         return downloadUrl; // ส่งกลับ URL
       } catch (e) {
         log('Error uploading image: $e');
@@ -266,6 +271,10 @@ class _SendFinalPageState extends State<SendFinalPage> {
   }
 
   void addProduct() async {
+    setState(() {
+      isLoading = true; // เริ่มการโหลด
+    });
+
     // อัปโหลดภาพและรับ URL
     String? imageUrl = await uploadImage();
 
@@ -293,6 +302,10 @@ class _SendFinalPageState extends State<SendFinalPage> {
     );
 
     log(response.body);
+
+    setState(() {
+      isLoading = false; // หยุดการโหลดเมื่อทำงานเสร็จ
+    });
 
     if (response.statusCode == 201) {
       // แสดง Dialog เมื่อทำงานสำเร็จ
@@ -348,14 +361,30 @@ class _SendFinalPageState extends State<SendFinalPage> {
     var db = FirebaseFirestore.instance;
 
     var data = {
-      'pro_name': pro.proName,
-      'pro_detail': pro.proDetail,
-      'proimg': pro.proImg,
-      'pro_status': pro.proStatus,
-      'traking_number': pro.trackingNumber,
-      'uid_fk_send': pro.uidFkSend,
-      'uid_fk_accept': pro.uidFkAccept,
-      'rid_fk': pro.ridFk
+      "pro_name": pro.proName,
+      "pro_detail": pro.proDetail,
+      "pro_img": pro.proImg,
+      "pro_status": pro.proStatus,
+      "tracking_number": pro.trackingNumber,
+      "uid_fk_send": pro.uidFkSend,
+      "uid_fk_accept": pro.uidFkAccept,
+      "rid_fk": pro.ridFk,
+      "sender_uid": pro.senderUid,
+      "sender_name": pro.senderName,
+      "sender_lastname": pro.senderLastname,
+      "sender_phone": pro.senderPhone,
+      "sender_address": pro.senderAddress,
+      "sender_latitude": pro.senderLatitude,
+      "sender_longitude": pro.senderLongitude,
+      "sender_img": pro.senderImg,
+      "receiver_uid": pro.receiverUid,
+      "receiver_name": pro.receiverName,
+      "receiver_lastname": pro.receiverLastname,
+      "receiver_phone": pro.receiverPhone,
+      "receiver_address": pro.receiverAddress,
+      "receiver_latitude": pro.receiverLatitude,
+      "receiver_longitude": pro.receiverLongitude,
+      "receiver_img": pro.receiverImg
     };
 
     db.collection('inbox').doc(pro.pid.toString()).set(data);
@@ -364,7 +393,7 @@ class _SendFinalPageState extends State<SendFinalPage> {
       context,
       MaterialPageRoute(
         builder: (context) => HomeUserPage(
-          uid: widget.uid,
+          uid: widget.myuid,
         ),
       ),
     );

@@ -421,7 +421,7 @@ class _ProfileUserState extends State<ProfileUser> {
                   left: 0,
                   right: 0,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 90),
+                    padding: const EdgeInsets.symmetric(horizontal: 100),
                     child: ClipOval(
                       child: Image.network(
                         user.img,
