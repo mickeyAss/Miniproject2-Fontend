@@ -3,56 +3,82 @@ import 'dart:convert';
 //
 //     final getUser2 = getUser2FromJson(jsonString);
 
-List<GetUser2> getUser2FromJson(String str) =>
-    List<GetUser2>.from(json.decode(str).map((x) => GetUser2.fromJson(x)));
+GetUser2 getUser2FromJson(String str) => GetUser2.fromJson(json.decode(str));
 
-String getUser2ToJson(List<GetUser2> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String getUser2ToJson(GetUser2 data) => json.encode(data.toJson());
 
 class GetUser2 {
-  int uid;
-  String name;
-  String lastname;
-  String phone;
-  String password;
-  String address;
-  String latitude;
-  String longitude;
-  String img;
+  int senderUid;
+  String senderName;
+  String senderLastname;
+  String senderPhone;
+  String senderAddress;
+  String senderLatitude;
+  String senderLongitude;
+  String senderImg;
+  int receiverUid;
+  String receiverName;
+  String receiverLastname;
+  String receiverPhone;
+  String receiverAddress;
+  String receiverLatitude;
+  String receiverLongitude;
+  String receiverImg;
 
   GetUser2({
-    required this.uid,
-    required this.name,
-    required this.lastname,
-    required this.phone,
-    required this.password,
-    required this.address,
-    required this.latitude,
-    required this.longitude,
-    required this.img,
+    required this.senderUid,
+    required this.senderName,
+    required this.senderLastname,
+    required this.senderPhone,
+    required this.senderAddress,
+    required this.senderLatitude,
+    required this.senderLongitude,
+    required this.senderImg,
+    required this.receiverUid,
+    required this.receiverName,
+    required this.receiverLastname,
+    required this.receiverPhone,
+    required this.receiverAddress,
+    required this.receiverLatitude,
+    required this.receiverLongitude,
+    required this.receiverImg,
   });
 
   factory GetUser2.fromJson(Map<String, dynamic> json) => GetUser2(
-        uid: json["uid"],
-        name: json["name"],
-        lastname: json["lastname"],
-        phone: json["phone"],
-        password: json["password"],
-        address: json["address"],
-        latitude: json["latitude"],
-        longitude: json["longitude"],
-        img: json["img"],
+        senderUid: json["sender_uid"],
+        senderName: json["sender_name"],
+        senderLastname: json["sender_lastname"],
+        senderPhone: json["sender_phone"],
+        senderAddress: json["sender_address"],
+        senderLatitude: json["sender_latitude"],
+        senderLongitude: json["sender_longitude"],
+        senderImg: json["sender_img"],
+        receiverUid: json["receiver_uid"],
+        receiverName: json["receiver_name"],
+        receiverLastname: json["receiver_lastname"],
+        receiverPhone: json["receiver_phone"],
+        receiverAddress: json["receiver_address"],
+        receiverLatitude: json["receiver_latitude"],
+        receiverLongitude: json["receiver_longitude"],
+        receiverImg: json["receiver_img"],
       );
 
   Map<String, dynamic> toJson() => {
-        "uid": uid,
-        "name": name,
-        "lastname": lastname,
-        "phone": phone,
-        "password": password,
-        "address": address,
-        "latitude": latitude,
-        "longitude": longitude,
-        "img": img,
+        "sender_uid": senderUid,
+        "sender_name": senderName,
+        "sender_lastname": senderLastname,
+        "sender_phone": senderPhone,
+        "sender_address": senderAddress,
+        "sender_latitude": senderLatitude,
+        "sender_longitude": senderLongitude,
+        "sender_img": senderImg,
+        "receiver_uid": receiverUid,
+        "receiver_name": receiverName,
+        "receiver_lastname": receiverLastname,
+        "receiver_phone": receiverPhone,
+        "receiver_address": receiverAddress,
+        "receiver_latitude": receiverLatitude,
+        "receiver_longitude": receiverLongitude,
+        "receiver_img": receiverImg,
       };
 }
