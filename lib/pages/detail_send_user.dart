@@ -62,27 +62,27 @@ class _DetailSendUserPageState extends State<DetailSendUserPage> {
                     children: [
                       Text(
                         getp.senderName,
-                        style: TextStyle(color: Colors.black38),
+                        style: const TextStyle(color: Colors.black38),
                       ),
                       const SizedBox(
                         width: 5,
                       ),
                       Text(
                         getp.senderLastname,
-                        style: TextStyle(color: Colors.black38),
+                        style: const TextStyle(color: Colors.black38),
                       ),
                       const SizedBox(
                         width: 10,
                       ),
                       Text(
                         getp.senderPhone,
-                        style: TextStyle(color: Colors.black38),
+                        style: const TextStyle(color: Colors.black38),
                       )
                     ],
                   ),
                   Text(
                     getp.senderAddress,
-                    style: TextStyle(color: Colors.black38),
+                    style: const TextStyle(color: Colors.black38),
                   ),
                   const SizedBox(
                     height: 10,
@@ -107,30 +107,30 @@ class _DetailSendUserPageState extends State<DetailSendUserPage> {
                     children: [
                       Text(
                         getp.receiverName,
-                        style: TextStyle(color: Colors.black38),
+                        style: const TextStyle(color: Colors.black38),
                       ),
                       const SizedBox(
                         width: 5,
                       ),
                       Text(
                         getp.receiverLastname,
-                        style: TextStyle(color: Colors.black38),
+                        style: const TextStyle(color: Colors.black38),
                       ),
                       const SizedBox(
                         width: 10,
                       ),
                       Text(
                         getp.receiverPhone,
-                        style: TextStyle(color: Colors.black38),
+                        style: const TextStyle(color: Colors.black38),
                       )
                     ],
                   ),
                   Text(
                     getp.receiverAddress,
-                    style: TextStyle(color: Colors.black38),
+                    style: const TextStyle(color: Colors.black38),
                   ),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   FilledButton(
@@ -150,16 +150,16 @@ class _DetailSendUserPageState extends State<DetailSendUserPage> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("รายละเอียดสินค้า",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.bold),),
+                              const Text("รายละเอียดสินค้า",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.bold),),
                               Row(
                                 children: [
-                                  Text("สถานะ : ",style: TextStyle(fontSize: 16,color:  Color.fromARGB(255, 72, 0, 0)),),
-                                  Text(getp.proStatus,style: TextStyle(fontSize: 16,color:  Color.fromARGB(255, 72, 0, 0)),),
+                                  const Text("สถานะ : ",style: TextStyle(fontSize: 16,color:  Color.fromARGB(255, 72, 0, 0)),),
+                                  Text(getp.proStatus,style: const TextStyle(fontSize: 16,color:  Color.fromARGB(255, 72, 0, 0)),),
                                 ],
                               )
                             ],
                           ),
-                          Icon(Icons.arrow_forward_ios)
+                          const Icon(Icons.arrow_forward_ios)
                         ],
                       ))
                 ],
