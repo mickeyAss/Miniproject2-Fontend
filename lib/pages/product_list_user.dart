@@ -578,6 +578,7 @@ class _ProductListUserPageState extends State<ProductListUserPage> {
     });
   }
 
+  // โหลดข้อมูล User
   Future<void> loadDataUser() async {
     var config = await Configuration.getConfig();
     var url = config['apiEndpoint'];

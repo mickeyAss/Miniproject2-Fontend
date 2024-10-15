@@ -27,7 +27,7 @@ class _DetailProductSendUserPageState extends State<DetailProductSendUserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("รายละเอียดสินค้า"),
+        title: Text("รายละเอียดสินค้า"),
         centerTitle: true,
         elevation: 0,
       ),
@@ -50,12 +50,12 @@ class _DetailProductSendUserPageState extends State<DetailProductSendUserPage> {
                     children: [
                       Text(
                         getp.proName,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       Row(
                         children: [
-                          const Text(
+                          Text(
                             "เลขพัสดุ : ",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
@@ -64,12 +64,12 @@ class _DetailProductSendUserPageState extends State<DetailProductSendUserPage> {
                       )
                     ],
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 30,
                   ),
                   Text(
                     getp.proDetail,
-                    style: const TextStyle(color: Colors.black45),
+                    style: TextStyle(color: Colors.black45),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
@@ -95,8 +95,8 @@ class _DetailProductSendUserPageState extends State<DetailProductSendUserPage> {
                   ),
                   Row(
                     children: [
-                      const Text("สถานะ : ",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color:  Color.fromARGB(255, 72, 0, 0)),),
-                      Text(getp.proStatus,style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color:  Color.fromARGB(255, 72, 0, 0)),),
+                      Text("สถานะ : ",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color:  Color.fromARGB(255, 72, 0, 0)),),
+                      Text(getp.proStatus,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color:  Color.fromARGB(255, 72, 0, 0)),),
                     ],
                   )
 
