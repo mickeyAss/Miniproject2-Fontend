@@ -32,7 +32,7 @@ class _SendUserPageState extends State<SendUserPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'ส่งพัสดุ',
+          'ค้นหาผู้รับพัสดุ',
           style: TextStyle(fontSize: 14, color: Colors.black54),
         ),
         centerTitle: true,
@@ -49,13 +49,6 @@ class _SendUserPageState extends State<SendUserPage> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(30, 0, 0, 10),
-                child: Text(
-                  "ค้นหาผู้รับพัสดุ",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-              ),
               Padding(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
                 child: TextField(
@@ -76,11 +69,13 @@ class _SendUserPageState extends State<SendUserPage> {
                         _performSearch(phone_phone);
                       },
                     ),
-                    contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                   ),
                   onChanged: (value) {
                     setState(() {
-                      searchResult = ''; // ล้าง searchResult เมื่อมีการกรอกข้อมูล
+                      searchResult =
+                          ''; // ล้าง searchResult เมื่อมีการกรอกข้อมูล
                     });
                     _getSuggestions(value);
                   },
@@ -91,14 +86,18 @@ class _SendUserPageState extends State<SendUserPage> {
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: ListView.separated(
                     shrinkWrap: true,
-                    itemCount: suggestions.where((user) => user.uid != widget.uid).length,
-                    separatorBuilder: (context, index) => Divider(), // เส้นกั้นระหว่างข้อมูล
+                    itemCount: suggestions
+                        .where((user) => user.uid != widget.uid)
+                        .length,
+                    separatorBuilder: (context, index) =>
+                        Divider(), // เส้นกั้นระหว่างข้อมูล
                     itemBuilder: (context, index) {
                       final filteredSuggestions = suggestions
                           .where((user) => user.uid != widget.uid)
                           .toList();
                       return Container(
-                        color: const Color.fromARGB(255, 255, 255, 255), // สีพื้นหลังของรายการ
+                        color: const Color.fromARGB(
+                            255, 255, 255, 255), // สีพื้นหลังของรายการ
                         child: ListTile(
                           title: Row(
                             children: [
@@ -113,7 +112,8 @@ class _SendUserPageState extends State<SendUserPage> {
                                       return CircleAvatar(
                                         radius: 20,
                                         backgroundColor: Colors.grey,
-                                        child: Icon(Icons.person, color: Colors.white),
+                                        child: Icon(Icons.person,
+                                            color: Colors.white),
                                       );
                                     },
                                   ),

@@ -9,6 +9,7 @@ import 'package:fontend_miniproject2/pages/login_user.dart';
 import 'package:fontend_miniproject2/pages/select_login.dart';
 import 'package:fontend_miniproject2/pages/profile_user.dart';
 import 'package:fontend_miniproject2/models/get_data_users.dart';
+import 'package:fontend_miniproject2/pages/product_list_user.dart';
 
 class HomeUserPage extends StatefulWidget {
   final int uid;
@@ -212,7 +213,14 @@ class _HomeUserPageState extends State<HomeUserPage> {
               }),
               SizedBox(height: 20),
               // ปุ่มรายการพัสดุ
-              buildActionButton('รายการพัสดุ', 'assets/images/box.png', () {}),
+              buildActionButton('รายการพัสดุ', 'assets/images/box.png', () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ProductListUserPage(uid: widget.uid)),
+                );
+              }),
             ],
           ),
         ),

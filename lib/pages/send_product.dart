@@ -122,47 +122,33 @@ class _SendProductPageState extends State<SendProductPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  FilledButton.icon(
-                      onPressed: () {},
-                      style: FilledButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 72, 0, 0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        minimumSize: const Size(40, 40),
-                        padding: EdgeInsets.all(5),
-                      ),
-                      label: Icon(
-                        Icons.add,
-                        size: 40,
-                      ))
+                  FilledButton(
+                    onPressed: () {
+                      if (nameProduct.text.isNotEmpty &&
+                          detailProduct.text.isNotEmpty &&
+                          image != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SendFinalPage(
+                              uid: widget.uid,
+                              myuid: widget.myuid,
+                              nameProduct: nameProduct.text,
+                              detailProduct: detailProduct.text,
+                              image: image,
+                            ),
+                          ),
+                        );
+                      } else {
+                        // แสดงข้อความแจ้งเตือนหากข้อมูลไม่ครบ
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('กรุณากรอกข้อมูลให้ครบถ้วน')),
+                        );
+                      }
+                    },
+                    child: Text('ถัดไป'),
+                  ),
                 ],
-              ),
-              FilledButton(
-                onPressed: () {
-                  if (nameProduct.text.isNotEmpty &&
-                      detailProduct.text.isNotEmpty &&
-                      image != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SendFinalPage(
-                          uid: widget.uid,
-                          myuid: widget.myuid,
-                          nameProduct: nameProduct.text,
-                          detailProduct: detailProduct.text,
-                          image: image,
-                        ),
-                      ),
-                    );
-                  } else {
-                    // แสดงข้อความแจ้งเตือนหากข้อมูลไม่ครบ
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('กรุณากรอกข้อมูลให้ครบถ้วน')),
-                    );
-                  }
-                },
-                child: Text('ถัดไป'),
               )
             ],
           ),
