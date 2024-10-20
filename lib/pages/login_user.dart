@@ -274,6 +274,40 @@ class _LoginUserPageState extends State<LoginUserPage> {
       } else if (response.statusCode == 404) {
         // ไม่พบผู้ใช้
         var errorData = jsonDecode(response.body);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Center(
+                  child: Text(
+                'ไม่พบผู้ใช้',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              )),
+              actions: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FilledButton(
+                      child: Text('ตกลง'),
+                      style: FilledButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 72, 0, 0),
+                          foregroundColor:
+                              const Color.fromARGB(255, 255, 255, 255),
+                          textStyle: TextStyle(fontSize: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          elevation: 5),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        );
         log('Error: ${errorData['error']}');
       } else if (response.statusCode == 401) {
         // รหัสผ่านไม่ถูกต้อง

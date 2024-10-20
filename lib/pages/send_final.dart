@@ -33,7 +33,7 @@ class SendFinalPage extends StatefulWidget {
 
 class _SendFinalPageState extends State<SendFinalPage> {
   late Future<void> loadData_User;
-  List<GetUser2> data = [];
+  late GetUser2 data;
   late GetProduct pro;
 
   bool isLoading = false;
@@ -89,73 +89,71 @@ class _SendFinalPageState extends State<SendFinalPage> {
                       padding: const EdgeInsets.all(10), // ระยะห่างภายใน
                       child: Column(
                         children: [
-                          if (data.isNotEmpty)
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      'ผู้ส่ง: ${data[0].name} ${data[0].lastname}',
-                                      style: const TextStyle(fontSize: 15),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${data[0].phone}',
-                                      style: const TextStyle(
-                                          fontSize: 15, color: Colors.black54),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${data[0].address}',
-                                      style: const TextStyle(
-                                          fontSize: 15, color: Colors.black54),
-                                    ),
-                                  ],
-                                ),
-                                const Divider(
-                                    height: 30,
-                                    thickness: 1,
-                                    color: Colors.grey), // เส้นขั้น
-                              ],
-                            ),
-                          if (data.length > 1)
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      'ผู้รับ: ${data[1].name} ${data[1].lastname}',
-                                      style: const TextStyle(fontSize: 15),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${data[1].phone}',
-                                      style: const TextStyle(
-                                          fontSize: 15, color: Colors.black54),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${data[1].address}',
-                                      style: const TextStyle(
-                                          fontSize: 15, color: Colors.black54),
-                                      softWrap: true,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'ผู้ส่ง: ${data.senderName} ${data.senderLastname}',
+                                    style: const TextStyle(fontSize: 15),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '${data.senderPhone}',
+                                    style: const TextStyle(
+                                        fontSize: 15, color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '${data.senderAddress}',
+                                    style: const TextStyle(
+                                        fontSize: 15, color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              const Divider(
+                                  height: 30,
+                                  thickness: 1,
+                                  color: Colors.grey), // เส้นขั้น
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'ผู้รับ: ${data.receiverName} ${data.receiverLastname}',
+                                    style: const TextStyle(fontSize: 15),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '${data.receiverPhone}',
+                                    style: const TextStyle(
+                                        fontSize: 15, color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '${data.receiverAddress}',
+                                    style: const TextStyle(
+                                        fontSize: 15, color: Colors.black54),
+                                    softWrap: true,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -261,7 +259,7 @@ class _SendFinalPageState extends State<SendFinalPage> {
     var url = config['apiEndpoint'];
 
     final response = await http
-        .get(Uri.parse("$url/user/get/${widget.uid}/${widget.myuid}"));
+        .get(Uri.parse("$url/user/get/${widget.myuid}/${widget.uid}"));
     log('Requesting URL: $url');
     log(response.body);
     var jsonResponse = (response.body);
@@ -288,8 +286,8 @@ class _SendFinalPageState extends State<SendFinalPage> {
       proName: widget.nameProduct,
       proDetail: widget.detailProduct,
       proImg: imageUrl,
-      uidFkSend: data[0].uid.toString(),
-      uidFkAccept: data[1].uid.toString(),
+      uidFkSend: widget.myuid.toString(),
+      uidFkAccept: widget.uid.toString(),
     );
 
     var config = await Configuration.getConfig();
@@ -352,12 +350,36 @@ class _SendFinalPageState extends State<SendFinalPage> {
     var config = await Configuration.getConfig();
     var url = config['apiEndpoint'];
 
+    // ทำการเรียก API เพื่อ get ข้อมูล
     final response = await http.get(Uri.parse("$url/product/get-latest"));
     log('Requesting URL: $url');
     log(response.body);
     var jsonResponse = (response.body);
     pro = getProductFromJson(jsonResponse);
 
+    // เตรียมข้อมูลสำหรับ POST ไปยังเส้น API ของ status
+    var postData = {
+      "uid_send": pro.uidFkSend,
+      "uid_accept": pro.uidFkAccept,
+      "staname": pro.proStatus,
+      "tacking": pro.trackingNumber
+    };
+
+    // POST ข้อมูลไปยัง API
+    final postResponse = await http.post(
+      Uri.parse("$url/product/add-status"),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(postData),
+    );
+
+    if (postResponse.statusCode == 201) {
+      log('Status successfully posted to API');
+    } else {
+      log('Failed to post status: ${postResponse.body}');
+      return; // หยุดการทำงานหาก POST ไม่สำเร็จ
+    }
+
+    // บันทึกข้อมูลลง Firebase หลังจาก POST สำเร็จ
     var db = FirebaseFirestore.instance;
 
     var data = {
@@ -387,8 +409,10 @@ class _SendFinalPageState extends State<SendFinalPage> {
       "receiver_img": pro.receiverImg
     };
 
+    // บันทึกลง Firebase
     db.collection('inbox').doc(pro.pid.toString()).set(data);
 
+    // นำไปยังหน้า HomeUserPage
     Navigator.push(
       context,
       MaterialPageRoute(

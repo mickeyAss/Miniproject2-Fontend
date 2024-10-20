@@ -6,30 +6,34 @@ import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fontend_miniproject2/config/config.dart';
+import 'package:fontend_miniproject2/pages/home_user.dart';
 import 'package:fontend_miniproject2/models/get_user2.dart';
+import 'package:fontend_miniproject2/pages/final_rider.dart';
 import 'package:fontend_miniproject2/models/get_product.dart';
-import 'package:fontend_miniproject2/models/get_data_users.dart';
+import 'package:fontend_miniproject2/models/get_data_rider.dart';
+import 'package:fontend_miniproject2/pages/parcel_receiced_rider.dart';
 
 class SendRederPage extends StatefulWidget {
   int rid = 0;
-  String traking_number = '';
-  SendRederPage({super.key, required this.rid, required this.traking_number});
+  String trackingNumber = '';
+  SendRederPage({super.key, required this.rid, required this.trackingNumber});
 
   @override
   State<SendRederPage> createState() => _SendRederPageState();
 }
 
 class _SendRederPageState extends State<SendRederPage> {
-  LatLng? latLng; // ใช้เป็น nullable ก่อนเพื่อป้องกันการใช้ค่าเริ่มต้น
+  LatLng? latLng; // ตำแหน่งปัจจุบัน
+  List<Marker> markers = []; // รายการ marker
 
   MapController mapController = MapController();
   late GetProduct getp;
-  List<GetUser2> getuser = [];
+  late GetDataRider getrider;
   var db = FirebaseFirestore.instance;
   late Future<void> loadData;
+  late Future<void> loadData_Rider;
   late StreamSubscription listener;
 
   @override
@@ -42,11 +46,8 @@ class _SendRederPageState extends State<SendRederPage> {
   void initState() {
     super.initState();
     _loadCurrentLocation(); // เรียกฟังก์ชันที่ใช้ async
-
-    loadData = loadDataProduct();
-
-    log(widget.traking_number.toString());
-    log(widget.rid.toString());
+    loadData = loadDataProduct(); // โหลดข้อมูลสินค้า
+    loadData_Rider = loadDataRider();
 
     // ติดตามเอกสารใน Firestore
     final docRef = db.collection("inbox2").doc("Doc1");
@@ -56,7 +57,6 @@ class _SendRederPageState extends State<SendRederPage> {
         if (data != null) {
           latLng = LatLng(data['latitude'], data['longitude']); // อัปเดตตำแหน่ง
           setState(() {}); // รีเรนเดอร์เมื่อได้ข้อมูลใหม่
-
           log("current data: ${event.data()}");
         }
       },
@@ -70,69 +70,249 @@ class _SendRederPageState extends State<SendRederPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.cancel),
-            onPressed: _cancelTracking, // เรียกฟังก์ชันเมื่อกดปุ่ม Cancel
-          ),
-        ],
-      ),
-      body: latLng == null // เช็คว่า latLng ถูกตั้งค่าแล้วหรือไม่
-          ? const Center(
-              child:
-                  const CircularProgressIndicator()) // แสดงวงกลมโหลดหากยังไม่มีตำแหน่ง
-          : Column(
+      body: latLng == null
+          ? const Center(child: CircularProgressIndicator())
+          : Stack(
               children: [
-                Expanded(
-                  child: FlutterMap(
-                    mapController: mapController,
-                    options: MapOptions(
-                      initialCenter: latLng!,
-                      initialZoom: 15.0,
-                      onMapReady: () {
-                        // ย้ายไปยังตำแหน่งที่ดึงมาได้เมื่อแผนที่พร้อม
-                        mapController.move(latLng!, 15.0);
-                      },
+                FlutterMap(
+                  mapController: mapController,
+                  options: MapOptions(
+                    initialCenter: latLng!,
+                    initialZoom: 15.0,
+                    onMapReady: () {
+                      mapController.move(latLng!, 15.0);
+                    },
+                  ),
+                  children: [
+                    TileLayer(
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      userAgentPackageName: 'com.example.app',
+                      maxNativeZoom: 19,
                     ),
-                    children: [
-                      TileLayer(
-                        urlTemplate:
-                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        userAgentPackageName: 'com.example.app',
-                        maxNativeZoom: 19,
-                      ),
-                      MarkerLayer(
-                        markers: [
-                          Marker(
-                            point: latLng!, // ใช้ตำแหน่งปัจจุบัน
-                            width: 40,
-                            height: 40,
-                            child: const Icon(
-                              Icons.navigation,
-                              size: 40,
-                              color: Color.fromARGB(255, 195, 0, 0),
-                            ),
+                    MarkerLayer(
+                      markers: [
+                        // Marker สำหรับตำแหน่งปัจจุบัน
+                        Marker(
+                          point: latLng!,
+                          width: 40,
+                          height: 40,
+                          child: const Icon(
+                            Icons.navigation,
+                            size: 30,
+                            color: Color.fromARGB(255, 0, 26, 128),
                           ),
-                          Marker(
-                            point: LatLng(39.3551,
-                                -123.01), // ใช้ละติจูดและลองจิจูดที่ต้องการ
-                            width: 40,
-                            height: 40,
-                            child: const Icon(
-                              Icons.pin_drop, // ไอคอนที่ใช้สำหรับ Marker ใหม่
-                              size: 40,
-                              color: Colors.blue, // สีของ Marker ใหม่
-                            ),
+                        ),
+                        ...markers, // เพิ่ม marker ที่มาจาก API
+                      ],
+                    ),
+                    // ปุ่มที่อยู่ติดขอบล่าง
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
                           ),
-                        ],
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 8,
+                              offset: Offset(0, -4),
+                            ),
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(16),
+                        child: getp.proStatus == 'รอไรเดอร์มารับ'
+                            ? isWithinRange(
+                                    latLng!,
+                                    LatLng(double.parse(getp.senderLatitude!),
+                                        double.parse(getp.senderLongitude!)),
+                                    50.0)
+                                ? FilledButton(
+                                    style: FilledButton.styleFrom(
+                                      backgroundColor:
+                                          const Color.fromARGB(255, 72, 0, 0),
+                                      foregroundColor: const Color.fromARGB(
+                                          255, 255, 255, 255),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Get.to(
+                                        () => ParcelReceicedRiderPage(
+                                          rid: widget.rid,
+                                          trackingNumber: widget.trackingNumber,
+                                        ),
+                                      );
+                                    },
+                                    child: const Text(
+                                      'รับพัสดุแล้ว',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  )
+                                : const Text('โปรดรับพัสดุให้สำเร็จ')
+                            : getp.proStatus == 'กำลังดำเนินการจัดส่ง'
+                                ? isWithinRange(
+                                        latLng!,
+                                        LatLng(
+                                            double.parse(
+                                                getp.receiverLatitude!),
+                                            double.parse(
+                                                getp.receiverLongitude!)),
+                                        50.0)
+                                    ? FilledButton(
+                                        style: FilledButton.styleFrom(
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 72, 0, 0),
+                                          foregroundColor: const Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                         Get.to(
+                                        () => FinalRiderPage(
+                                          rid: widget.rid,
+                                          trackingNumber: widget.trackingNumber,
+                                        ),
+                                      );
+                                        },
+                                        child: const Text(
+                                          'ดำเนินการต่อ',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      )
+                                    : const Text('โปรดจัดส่งพัสดุให้สำเร็จ')
+                                : const Text('สถานะไม่ถูกต้อง'),
                       ),
-                    ],
+                    )
+                  ],
+                ),
+                // Positioned สำหรับ FutureBuilder
+                Positioned(
+                  top: 50.0,
+                  right: 16.0,
+                  child: FutureBuilder(
+                    future: loadData_Rider,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return const Text('Error loading user data');
+                      }
+                      return GestureDetector(
+                        child: ClipOval(
+                          child: Image.network(
+                            getrider.img,
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
             ),
     );
+  }
+
+  Future<void> loadDataProduct() async {
+    var config = await Configuration.getConfig();
+    var url = config['apiEndpoint'];
+
+    final response =
+        await http.get(Uri.parse("$url/product/get/${widget.trackingNumber}"));
+    if (response.statusCode == 200) {
+      getp = getProductFromJson(response.body);
+      log(response.body);
+
+      // ตรวจสอบสถานะพัสดุ
+      if (getp.proStatus == 'รอไรเดอร์มารับ') {
+        // แสดงตำแหน่งของผู้ส่ง
+        if (getp.senderLatitude != null && getp.senderLongitude != null) {
+          try {
+            double latitude = double.parse(getp.senderLatitude!);
+            double longitude = double.parse(getp.senderLongitude!);
+
+            // สร้าง marker จากตำแหน่งผู้ส่ง
+            final senderMarker = Marker(
+              point: LatLng(latitude, longitude),
+              width: 40,
+              height: 40,
+              child: const Icon(
+                Icons.location_on,
+                size: 30,
+                color: Color.fromARGB(255, 72, 0, 0), // สี marker ของผู้ส่ง
+              ),
+            );
+
+            markers.add(senderMarker);
+            mapController.move(LatLng(latitude, longitude), 15.0);
+          } catch (e) {
+            log('Error parsing sender latitude or longitude: $e');
+          }
+        }
+      } else if (getp.proStatus == 'กำลังดำเนินการจัดส่ง') {
+        // แสดงตำแหน่งของผู้รับ
+        if (getp.receiverLatitude != null && getp.receiverLongitude != null) {
+          try {
+            double latitude = double.parse(getp.receiverLatitude!);
+            double longitude = double.parse(getp.receiverLongitude!);
+
+            // สร้าง marker จากตำแหน่งผู้รับ
+            final receiverMarker = Marker(
+              point: LatLng(latitude, longitude),
+              width: 40,
+              height: 40,
+              child: const Icon(
+                Icons.location_on,
+                size: 30,
+                color: Colors.green, // สี marker ของผู้รับ
+              ),
+            );
+
+            markers.add(receiverMarker);
+            mapController.move(LatLng(latitude, longitude), 15.0);
+          } catch (e) {
+            log('Error parsing receiver latitude or longitude: $e');
+          }
+        }
+      }
+
+      setState(() {}); // รีเรนเดอร์เพื่อแสดง marker ใหม่
+    } else {
+      log('Error loading product data: ${response.statusCode}');
+    }
+  }
+
+  Future<void> loadDataRider() async {
+    var config = await Configuration.getConfig();
+    var url = config['apiEndpoint'];
+
+    final response = await http.get(Uri.parse("$url/rider/get/${widget.rid}"));
+    if (response.statusCode == 200) {
+      getrider = getDataRiderFromJson(response.body);
+      log(response.body);
+    } else {
+      log('Error loading rider data: ${response.statusCode}');
+    }
   }
 
   Future<Position> _determinePosition() async {
@@ -196,18 +376,14 @@ class _SendRederPageState extends State<SendRederPage> {
     Navigator.pop(context); // กลับไปยังหน้าก่อนหน้า
   }
 
-  Future<void> loadDataProduct() async {
-    var config = await Configuration.getConfig();
-    var url = config['apiEndpoint'];
-
-    final response =
-        await http.get(Uri.parse("$url/product/get/${widget.traking_number}"));
-    if (response.statusCode == 200) {
-      getp = getProductFromJson(response.body);
-      log(response.body);
-      setState(() {});
-    } else {
-      log('Error loading user data: ${response.statusCode}');
-    }
+  bool isWithinRange(
+      LatLng currentPosition, LatLng productPosition, double rangeInMeters) {
+    final distance = Geolocator.distanceBetween(
+      currentPosition.latitude,
+      currentPosition.longitude,
+      productPosition.latitude,
+      productPosition.longitude,
+    );
+    return distance <= rangeInMeters;
   }
 }

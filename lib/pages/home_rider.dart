@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -218,9 +219,11 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                'สามารถตรวจสอบงานที่ต้องการรับ\nได้จากปุ่มด่านล่าง',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                'งานเข้าแล้ว!!!',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40),
                 textAlign: TextAlign.center,
               ),
               Image.asset(
@@ -249,128 +252,212 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: FractionallySizedBox(
-                            heightFactor: 0.9,
+                            heightFactor: 0.8,
                             widthFactor: 1.0,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: Column(
-                                    children: [
-                                      const Text(
-                                        'รายการงาน',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Column(
+                                      children: [
+                                        const Text(
+                                          'รายการงาน',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
 
-                                      const SizedBox(height: 20),
+                                        const SizedBox(height: 20),
 
-                                      // ใน StreamBuilder ให้ปรับปรุง onPressed ใน FilledButton
-                                      StreamBuilder(
-                                        stream: FirebaseFirestore.instance
-                                            .collection('inbox')
-                                            .where('pro_status',
-                                                isEqualTo:
-                                                    'รอไรเดอร์มารับ') // กรองเอกสารที่มี prp_status เท่ากับ "รอไรเดอร์มารับ"
-                                            .snapshots(),
-                                        builder: (context, snapshot) {
-                                          if (!snapshot.hasData) {
-                                            return const Center(
-                                                child:
-                                                    CircularProgressIndicator());
-                                          }
+                                        // ใน StreamBuilder ให้ปรับปรุง onPressed ใน FilledButton
+                                        StreamBuilder(
+                                          stream: FirebaseFirestore.instance
+                                              .collection('inbox')
+                                              .where('pro_status',
+                                                  isEqualTo:
+                                                      'รอไรเดอร์มารับ') // กรองเอกสารที่มี prp_status เท่ากับ "รอไรเดอร์มารับ"
+                                              .snapshots(),
+                                          builder: (context, snapshot) {
+                                            if (!snapshot.hasData) {
+                                              return const Center(
+                                                  child:
+                                                      CircularProgressIndicator());
+                                            }
 
-                                          var documents = snapshot.data!.docs;
+                                            var documents = snapshot.data!.docs;
 
-                                          return ListView.builder(
-                                            shrinkWrap: true,
-                                            itemCount: documents.length,
-                                            itemBuilder: (context, index) {
-                                              var firepro =
-                                                  documents[index].data();
-                                              String documentId =
-                                                  documents[index].id;
+                                            return ListView.builder(
+                                              shrinkWrap: true,
+                                              itemCount: documents.length,
+                                              itemBuilder: (context, index) {
+                                                var firepro =
+                                                    documents[index].data();
+                                                String documentId =
+                                                    documents[index].id;
 
-                                              return ExpansionTile(
-                                                title: Row(
-                                                  children: [
-                                                    Text(firepro['pro_name']
-                                                        .toString()),
-                                                  ],
-                                                ),
-                                                children: <Widget>[
-                                                  ListTile(
-                                                    title: const Text(
-                                                      'รายละเอียดสินค้า',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    subtitle: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                return Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Color.fromARGB(
+                                                        255, 72, 0, 0),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10), // มุมโค้ง
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors
+                                                            .black26, // สีเงา
+                                                        blurRadius:
+                                                            5, // ความเบลอของเงา
+                                                        offset: Offset(
+                                                            2, 2), // ตำแหน่งเงา
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  margin: const EdgeInsets
+                                                      .symmetric(
+                                                      vertical:
+                                                          10), // ระยะห่างระหว่าง ExpansionTile
+
+                                                  child: ExpansionTile(
+                                                    title: Row(
                                                       children: [
-                                                        Text(firepro[
-                                                                'pro_detail']
-                                                            .toString()),
                                                         Text(
-                                                            'เลขพัสดุ : ${firepro['tracking_number'].toString()}'),
-                                                        Center(
-                                                          child: Image.network(
-                                                            firepro['pro_img'],
-                                                            width: 200,
-                                                            height: 200,
-                                                          ),
+                                                          'พัสดุ : ${firepro['pro_name'].toString()}',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight: FontWeight
+                                                                  .bold), // เปลี่ยนสีข้อความให้เป็นสีขาว
                                                         ),
                                                       ],
                                                     ),
-                                                  ),
-                                                  FilledButton(
-                                                    onPressed: () async {
-                                                      try {
-                                                        // อัปเดตสถานะเมื่อกดปุ่มรับงาน
-                                                        await updateProStatus(
-                                                            documentId);
-
-                                                        // เปลี่ยนหน้าไปยัง SendRederPage
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                SendRederPage(
-                                                              traking_number:
-                                                                  firepro[
-                                                                      'tracking_number'],
-                                                              rid: widget.rid,
-                                                            ),
+                                                    children: <Widget>[
+                                                      ListTile(
+                                                        title: const Text(
+                                                          'รายละเอียดสินค้า',
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors
+                                                                .white, // เปลี่ยนสีข้อความให้เป็นสีขาว
                                                           ),
-                                                        );
-                                                      } catch (e) {
-                                                        // จัดการข้อผิดพลาด
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                          SnackBar(
-                                                              content: Text(
-                                                                  'Error updating status: $e')),
-                                                        );
-                                                      }
-                                                    },
-                                                    child: const Text('รับงาน'),
+                                                        ),
+                                                        subtitle: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              firepro['pro_detail']
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white), // เปลี่ยนสีข้อความให้เป็นสีขาว
+                                                            ),
+                                                            Text(
+                                                              'เลขพัสดุ : ${firepro['tracking_number'].toString()}',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white), // เปลี่ยนสีข้อความให้เป็นสีขาว
+                                                            ),
+                                                            SizedBox(
+                                                              height: 20,
+                                                            ),
+                                                            ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12), // ปรับรัศมีของมุม
+                                                              child:
+                                                                  Image.network(
+                                                                firepro[
+                                                                    'pro_img'],
+                                                                width: 100,
+                                                                height: 100,
+                                                                fit: BoxFit
+                                                                    .cover, // ปรับขนาดรูปให้เต็มพื้นที่
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(10.0),
+                                                        child: Container(
+                                                          width: double
+                                                              .infinity, // กำหนดให้เต็มขอบจอ
+                                                          child: FilledButton(
+                                                            style: FilledButton
+                                                                .styleFrom(
+                                                              backgroundColor:
+                                                                  Colors
+                                                                      .white, // กำหนดสีพื้นหลังเป็นสีขาว
+                                                              foregroundColor:
+                                                                  Colors
+                                                                      .black, // กำหนดสีข้อความเป็นสีดำ
+
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            20), // มุมโค้ง
+                                                              ),
+                                                            ),
+                                                            onPressed:
+                                                                () async {
+                                                              try {
+                                                                // อัปเดตสถานะเมื่อกดปุ่มรับงาน
+                                                                await updateProStatus(
+                                                                    documentId);
+
+                                                                // เปลี่ยนหน้าไปยัง SendRederPage
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            SendRederPage(
+                                                                      trackingNumber:
+                                                                          firepro[
+                                                                              'tracking_number'],
+                                                                      rid: widget
+                                                                          .rid,
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              } catch (e) {
+                                                                // จัดการข้อผิดพลาด
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                  SnackBar(
+                                                                      content: Text(
+                                                                          'Error updating status: $e')),
+                                                                );
+                                                              }
+                                                            },
+                                                            child: const Text(
+                                                                'รับงาน'),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    ],
+                                                );
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         );
@@ -396,11 +483,6 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
-              const Text('รายการงาน',
-                  style: TextStyle(fontSize: 16, color: Colors.white)),
             ],
           ),
         ),
@@ -450,13 +532,55 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
   // ฟังก์ชันสำหรับอัปเดตสถานะ
   Future<void> updateProStatus(String documentId) async {
     try {
+      // อัปเดตสถานะใน Firestore
       await FirebaseFirestore.instance
           .collection('inbox')
           .doc(documentId)
           .update({
-        'pro_status': 'รับงานแล้ว', // อัปเดตสถานะ
+        'pro_status': 'ไรเดอร์กำลังไปรับพัสดุ', // อัปเดตสถานะ
       });
       log('Status updated successfully');
+
+      // ดึงข้อมูลจาก Firestore
+      var documentSnapshot = await FirebaseFirestore.instance
+          .collection('inbox')
+          .doc(documentId)
+          .get();
+
+      if (documentSnapshot.exists) {
+        var data = documentSnapshot.data();
+        var uidSend = data?['uid_fk_send']; // ดึงค่า uid_send
+        var uidAccept = data?['uid_fk_accept']; // ดึงค่า uid_accept
+        var proStatus = data?['pro_status']; // ดึงค่า pro_status
+        var tracking = data?['tracking_number'];
+
+        var config = await Configuration.getConfig();
+        var url = config['apiEndpoint'];
+
+        // เตรียมข้อมูลสำหรับ POST ไปยังเส้น API ของ status
+        var postData = {
+          "uid_send": uidSend,
+          "uid_accept": uidAccept,
+          "staname": proStatus,
+          "tacking": tracking,
+        };
+
+        // POST ข้อมูลไปยัง API
+        final postResponse = await http.post(
+          Uri.parse("$url/product/add-status"),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(postData),
+        );
+
+        if (postResponse.statusCode == 201) {
+          log('Status successfully posted to API');
+        } else {
+          log('Failed to post status: ${postResponse.body}');
+          return; // หยุดการทำงานหาก POST ไม่สำเร็จ
+        }
+      } else {
+        log('Document does not exist');
+      }
     } catch (e) {
       log('Error updating status: $e');
     }

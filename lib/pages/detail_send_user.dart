@@ -1,4 +1,5 @@
 import 'dart:developer';
+<<<<<<< HEAD
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,15 @@ import 'package:fontend_miniproject2/models/get_product.dart';
 import 'package:fontend_miniproject2/pages/detail_product_send_user.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+=======
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fontend_miniproject2/config/config.dart';
+import 'package:fontend_miniproject2/models/get_product.dart';
+import 'package:fontend_miniproject2/pages/detail_product_send_user.dart';
+>>>>>>> 0442ecc0dbc207302d7c52280aa6f866b3515d30
 
 class DetailSendUserPage extends StatefulWidget {
   String track = "";
@@ -17,7 +27,10 @@ class DetailSendUserPage extends StatefulWidget {
 }
 
 class _DetailSendUserPageState extends State<DetailSendUserPage> {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0442ecc0dbc207302d7c52280aa6f866b3515d30
   late GetProduct getp;
   late Future<void> loadData;
 
@@ -135,14 +148,25 @@ class _DetailSendUserPageState extends State<DetailSendUserPage> {
                   ),
                   FilledButton(
                       onPressed: () {
+<<<<<<< HEAD
                         Get.to(()=>DetailProductSendUserPage(track: getp.trackingNumber,));
+=======
+                        Get.to(() => DetailProductSendUserPage(
+                              track: getp.trackingNumber,
+                            ));
+>>>>>>> 0442ecc0dbc207302d7c52280aa6f866b3515d30
                       },
                       style: FilledButton.styleFrom(
                         backgroundColor: Colors.black38,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5), // รูปร่างปุ่ม
                         ),
+<<<<<<< HEAD
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16), 
+=======
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 16),
+>>>>>>> 0442ecc0dbc207302d7c52280aa6f866b3515d30
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -150,11 +174,35 @@ class _DetailSendUserPageState extends State<DetailSendUserPage> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+<<<<<<< HEAD
                               Text("รายละเอียดสินค้า",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.bold),),
                               Row(
                                 children: [
                                   Text("สถานะ : ",style: TextStyle(fontSize: 16,color:  Color.fromARGB(255, 72, 0, 0)),),
                                   Text(getp.proStatus,style: TextStyle(fontSize: 16,color:  Color.fromARGB(255, 72, 0, 0)),),
+=======
+                              Text(
+                                "รายละเอียดสินค้า",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "สถานะ : ",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Color.fromARGB(255, 72, 0, 0)),
+                                  ),
+                                  Text(
+                                    getp.proStatus,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Color.fromARGB(255, 72, 0, 0)),
+                                  ),
+>>>>>>> 0442ecc0dbc207302d7c52280aa6f866b3515d30
                                 ],
                               )
                             ],

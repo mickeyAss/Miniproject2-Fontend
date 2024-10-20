@@ -41,48 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAocAR-WJ4sFnHzDogDb7o5V_jMYMIOqgw',
-    appId: '1:910504344799:web:db88a3a4b31c931ec3bd6a',
-    messagingSenderId: '910504344799',
-    projectId: 'gps-miniproject2',
-    authDomain: 'gps-miniproject2.firebaseapp.com',
-    storageBucket: 'gps-miniproject2.appspot.com',
-    measurementId: 'G-7ES0D48CRY',
+    apiKey: 'AIzaSyDiKK-KksqJl0M2_Y0qkljvKLOyxctUNpc',
+    appId: '1:527562602943:web:bbaf5f37eb26609c99c90a',
+    messagingSenderId: '527562602943',
+    projectId: 'asdasdada-2d2c0',
+    authDomain: 'asdasdada-2d2c0.firebaseapp.com',
+    storageBucket: 'asdasdada-2d2c0.appspot.com',
+    measurementId: 'G-XKS34MF7EM',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD4Z2zE276vqY4C2B_1u2RXVFLAdAyZ0bU',
-    appId: '1:910504344799:android:a5c67870af8d47d5c3bd6a',
-    messagingSenderId: '910504344799',
-    projectId: 'gps-miniproject2',
-    storageBucket: 'gps-miniproject2.appspot.com',
+    apiKey: 'AIzaSyDCyPbmbCB2UrOuw5neRTUeHJbYK0t3nHk',
+    appId: '1:527562602943:android:e8a218f556b1033599c90a',
+    messagingSenderId: '527562602943',
+    projectId: 'asdasdada-2d2c0',
+    storageBucket: 'asdasdada-2d2c0.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD0oO4BCwrHEjuhQi1m_WBupoJh4hbxRqg',
-    appId: '1:910504344799:ios:0cff80a0bc14a4b0c3bd6a',
-    messagingSenderId: '910504344799',
-    projectId: 'gps-miniproject2',
-    storageBucket: 'gps-miniproject2.appspot.com',
+    apiKey: 'AIzaSyBPIzqRFe0-j0QQyfsIKoI2WHN8j4S4aPg',
+    appId: '1:527562602943:ios:0baf8c38af21f06699c90a',
+    messagingSenderId: '527562602943',
+    projectId: 'asdasdada-2d2c0',
+    storageBucket: 'asdasdada-2d2c0.appspot.com',
     iosBundleId: 'com.example.fontendMiniproject2',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyD0oO4BCwrHEjuhQi1m_WBupoJh4hbxRqg',
-    appId: '1:910504344799:ios:0cff80a0bc14a4b0c3bd6a',
-    messagingSenderId: '910504344799',
-    projectId: 'gps-miniproject2',
-    storageBucket: 'gps-miniproject2.appspot.com',
+    apiKey: 'AIzaSyBPIzqRFe0-j0QQyfsIKoI2WHN8j4S4aPg',
+    appId: '1:527562602943:ios:0baf8c38af21f06699c90a',
+    messagingSenderId: '527562602943',
+    projectId: 'asdasdada-2d2c0',
+    storageBucket: 'asdasdada-2d2c0.appspot.com',
     iosBundleId: 'com.example.fontendMiniproject2',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAocAR-WJ4sFnHzDogDb7o5V_jMYMIOqgw',
-    appId: '1:910504344799:web:6506409a3940bbb3c3bd6a',
-    messagingSenderId: '910504344799',
-    projectId: 'gps-miniproject2',
-    authDomain: 'gps-miniproject2.firebaseapp.com',
-    storageBucket: 'gps-miniproject2.appspot.com',
-    measurementId: 'G-K5D56YVW72',
+    apiKey: 'AIzaSyDiKK-KksqJl0M2_Y0qkljvKLOyxctUNpc',
+    appId: '1:527562602943:web:06a31a6185c11be499c90a',
+    messagingSenderId: '527562602943',
+    projectId: 'asdasdada-2d2c0',
+    authDomain: 'asdasdada-2d2c0.firebaseapp.com',
+    storageBucket: 'asdasdada-2d2c0.appspot.com',
+    measurementId: 'G-1R63RF37LY',
   );
+
 }
