@@ -10,7 +10,6 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fontend_miniproject2/config/config.dart';
 import 'package:fontend_miniproject2/pages/send_rider.dart';
-import 'package:fontend_miniproject2/models/get_product.dart';
 import 'package:fontend_miniproject2/pages/select_login.dart';
 import 'package:fontend_miniproject2/pages/profile_user.dart';
 import 'package:fontend_miniproject2/models/get_data_rider.dart';
@@ -38,8 +37,6 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
 
   // เพิ่มตัวแปรสำหรับ StreamSubscription
   StreamSubscription<QuerySnapshot>? _subscription;
-
-  late GetProduct pro;
 
   @override
   void initState() {
@@ -555,6 +552,7 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
         var uidSend = data?['uid_fk_send']; // ดึงค่า uid_send
         var uidAccept = data?['uid_fk_accept']; // ดึงค่า uid_accept
         var proStatus = data?['pro_status']; // ดึงค่า pro_status
+        var tracking = data?['tracking_number'];
 
         var config = await Configuration.getConfig();
         var url = config['apiEndpoint'];
@@ -564,6 +562,7 @@ class _HomeRiderPageState extends State<HomeRiderPage> {
           "uid_send": uidSend,
           "uid_accept": uidAccept,
           "staname": proStatus,
+          "tacking": tracking,
         };
 
         // POST ข้อมูลไปยัง API

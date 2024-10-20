@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fontend_miniproject2/config/config.dart';
 import 'package:fontend_miniproject2/pages/home_user.dart';
 import 'package:fontend_miniproject2/models/get_user2.dart';
+import 'package:fontend_miniproject2/pages/final_rider.dart';
 import 'package:fontend_miniproject2/models/get_product.dart';
 import 'package:fontend_miniproject2/models/get_data_rider.dart';
 import 'package:fontend_miniproject2/pages/parcel_receiced_rider.dart';
@@ -127,39 +128,79 @@ class _SendRederPageState extends State<SendRederPage> {
                           ],
                         ),
                         padding: const EdgeInsets.all(16),
-                        child: isWithinRange(
-                                latLng!,
-                                LatLng(double.parse(getp.senderLatitude!),
-                                    double.parse(getp.senderLongitude!)),
-                                50.0)
-                            ? FilledButton(
-                                style: FilledButton.styleFrom(
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 72, 0, 0),
-                                  foregroundColor:
-                                      const Color.fromARGB(255, 255, 255, 255),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Get.to(
-                                    () => ParcelReceicedRiderPage(
-                                      rid: widget.rid,
-                                      trackingNumber: widget.trackingNumber,
+                        child: getp.proStatus == 'รอไรเดอร์มารับ'
+                            ? isWithinRange(
+                                    latLng!,
+                                    LatLng(double.parse(getp.senderLatitude!),
+                                        double.parse(getp.senderLongitude!)),
+                                    50.0)
+                                ? FilledButton(
+                                    style: FilledButton.styleFrom(
+                                      backgroundColor:
+                                          const Color.fromARGB(255, 72, 0, 0),
+                                      foregroundColor: const Color.fromARGB(
+                                          255, 255, 255, 255),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
                                     ),
-                                  );
-                                },
-                                child: const Text(
-                                  'รับพัสดุแล้ว',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15),
-                                ),
-                              )
-                            : const Text('โปรดรับสินค้าให้สำเร็จ'),
+                                    onPressed: () {
+                                      Get.to(
+                                        () => ParcelReceicedRiderPage(
+                                          rid: widget.rid,
+                                          trackingNumber: widget.trackingNumber,
+                                        ),
+                                      );
+                                    },
+                                    child: const Text(
+                                      'รับพัสดุแล้ว',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  )
+                                : const Text('โปรดรับพัสดุให้สำเร็จ')
+                            : getp.proStatus == 'กำลังดำเนินการจัดส่ง'
+                                ? isWithinRange(
+                                        latLng!,
+                                        LatLng(
+                                            double.parse(
+                                                getp.receiverLatitude!),
+                                            double.parse(
+                                                getp.receiverLongitude!)),
+                                        50.0)
+                                    ? FilledButton(
+                                        style: FilledButton.styleFrom(
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 72, 0, 0),
+                                          foregroundColor: const Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                         Get.to(
+                                        () => FinalRiderPage(
+                                          rid: widget.rid,
+                                          trackingNumber: widget.trackingNumber,
+                                        ),
+                                      );
+                                        },
+                                        child: const Text(
+                                          'ดำเนินการต่อ',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      )
+                                    : const Text('โปรดจัดส่งพัสดุให้สำเร็จ')
+                                : const Text('สถานะไม่ถูกต้อง'),
                       ),
-                    ),
+                    )
                   ],
                 ),
                 // Positioned สำหรับ FutureBuilder
@@ -202,31 +243,56 @@ class _SendRederPageState extends State<SendRederPage> {
       getp = getProductFromJson(response.body);
       log(response.body);
 
-      // ตรวจสอบและแปลงค่า latitude และ longitude จาก String เป็น double
-      if (getp.senderLatitude != null && getp.senderLongitude != null) {
-        try {
-          double latitude = double.parse(getp.senderLatitude!);
-          double longitude = double.parse(getp.senderLongitude!);
+      // ตรวจสอบสถานะพัสดุ
+      if (getp.proStatus == 'รอไรเดอร์มารับ') {
+        // แสดงตำแหน่งของผู้ส่ง
+        if (getp.senderLatitude != null && getp.senderLongitude != null) {
+          try {
+            double latitude = double.parse(getp.senderLatitude!);
+            double longitude = double.parse(getp.senderLongitude!);
 
-          // สร้าง marker จากตำแหน่งที่แปลงแล้ว
-          final productMarker = Marker(
-            point: LatLng(latitude, longitude), // ใช้ตำแหน่งที่ได้จาก API
-            width: 40,
-            height: 40,
-            child: const Icon(
-              Icons.location_on, // เปลี่ยนไอคอนตามที่ต้องการ
-              size: 30,
-              color: Color.fromARGB(255, 72, 0, 0), // สีของ marker
-            ),
-          );
+            // สร้าง marker จากตำแหน่งผู้ส่ง
+            final senderMarker = Marker(
+              point: LatLng(latitude, longitude),
+              width: 40,
+              height: 40,
+              child: const Icon(
+                Icons.location_on,
+                size: 30,
+                color: Color.fromARGB(255, 72, 0, 0), // สี marker ของผู้ส่ง
+              ),
+            );
 
-          // เพิ่ม marker ลงในรายการ
-          markers.add(productMarker);
+            markers.add(senderMarker);
+            mapController.move(LatLng(latitude, longitude), 15.0);
+          } catch (e) {
+            log('Error parsing sender latitude or longitude: $e');
+          }
+        }
+      } else if (getp.proStatus == 'กำลังดำเนินการจัดส่ง') {
+        // แสดงตำแหน่งของผู้รับ
+        if (getp.receiverLatitude != null && getp.receiverLongitude != null) {
+          try {
+            double latitude = double.parse(getp.receiverLatitude!);
+            double longitude = double.parse(getp.receiverLongitude!);
 
-          // ย้ายแผนที่ไปยังตำแหน่งของ marker ใหม่
-          mapController.move(LatLng(latitude, longitude), 15.0);
-        } catch (e) {
-          log('Error parsing latitude or longitude: $e');
+            // สร้าง marker จากตำแหน่งผู้รับ
+            final receiverMarker = Marker(
+              point: LatLng(latitude, longitude),
+              width: 40,
+              height: 40,
+              child: const Icon(
+                Icons.location_on,
+                size: 30,
+                color: Colors.green, // สี marker ของผู้รับ
+              ),
+            );
+
+            markers.add(receiverMarker);
+            mapController.move(LatLng(latitude, longitude), 15.0);
+          } catch (e) {
+            log('Error parsing receiver latitude or longitude: $e');
+          }
         }
       }
 

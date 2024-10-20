@@ -13,12 +13,14 @@ class GetStatus {
     String staname;
     int uidSend;
     int uidAccept;
+    String tacking;
 
     GetStatus({
         required this.sid,
         required this.staname,
         required this.uidSend,
         required this.uidAccept,
+        required this.tacking,
     });
 
     factory GetStatus.fromJson(Map<String, dynamic> json) => GetStatus(
@@ -26,6 +28,7 @@ class GetStatus {
         staname: json["staname"],
         uidSend: json["uid_send"],
         uidAccept: json["uid_accept"],
+        tacking: json["tacking"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -33,5 +36,6 @@ class GetStatus {
         "staname": staname,
         "uid_send": uidSend,
         "uid_accept": uidAccept,
+        "tacking": tacking,
     };
 }

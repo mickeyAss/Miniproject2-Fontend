@@ -362,6 +362,7 @@ class _SendFinalPageState extends State<SendFinalPage> {
       "uid_send": pro.uidFkSend,
       "uid_accept": pro.uidFkAccept,
       "staname": pro.proStatus,
+      "tacking": pro.trackingNumber
     };
 
     // POST ข้อมูลไปยัง API
